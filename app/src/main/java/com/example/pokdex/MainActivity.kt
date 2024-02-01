@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.pokdex.ui.theme.PokédexTheme
-import com.example.pokdex.ui.views.SplashScreenView
+import com.example.pokdex.ui.views.SummaryView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PokédexTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    SplashScreenView()
+                    SummaryView()
                 }
             }
         }
