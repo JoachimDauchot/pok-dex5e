@@ -1,4 +1,4 @@
-package com.example.pokdex.views
+package com.example.pokdex.ui.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pokdex.viewmodels.MainScreenViewModel
-import com.example.pokdex.views.components.MyPokemonIndexCard
+import com.example.pokdex.ui.viewmodels.MainScreenViewModel
+import com.example.pokdex.ui.views.components.MyPokemonIndexCard
 
 @Composable
 fun MainScreenView(

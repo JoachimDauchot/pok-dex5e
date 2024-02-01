@@ -1,4 +1,4 @@
-package com.example.pokdex.views.components
+package com.example.pokdex.ui.views.components
 
 
 import androidx.compose.foundation.layout.fillMaxWidth
