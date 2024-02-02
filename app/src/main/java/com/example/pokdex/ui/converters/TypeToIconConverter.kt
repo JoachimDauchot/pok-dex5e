@@ -5,6 +5,7 @@ import com.example.pokdex.R
 
 fun typeToIconConverter(type: String): Int {
     when (type.lowercase()) {
+        "bug" -> return R.drawable.bug
         "dark" -> return R.drawable.dark
         "dragon" -> return R.drawable.dragon
         "electric" -> return R.drawable.electric

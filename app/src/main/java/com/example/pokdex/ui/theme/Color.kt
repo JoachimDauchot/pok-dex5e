@@ -31,6 +31,7 @@ var TransparentBrush = Color(0, 0, 0, 0)
 
 fun convertTypeToColor(type: String): Color {
     when (type.lowercase()) {
+        "bug" -> return BugBrush
         "dark" -> return DarkBrush
         "dragon" -> return DragonBrush
         "electric" -> return ElectricBrush

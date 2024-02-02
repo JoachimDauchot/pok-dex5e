@@ -47,13 +47,11 @@ fun MyPokemonIndexCard(summary: PokemonSummary) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     for (type in summary.types) {
                         Box(modifier = Modifier.width(100.dp).padding(PaddingValues(end = 5.dp)).background(color = convertTypeToColor(type), shape = RoundedCornerShape(12.dp))) {
-                            Row(modifier = Modifier.padding(PaddingValues(start = 5.dp))) {
+                            Row(modifier = Modifier.padding(PaddingValues(start = 8.dp))) {
                                 Image(
                                     painter = painterResource(id = typeToIconConverter(type)),
                                     "type",
-                                    Modifier.size(15.dp).align(Alignment.CenterVertically).padding(
-                                        PaddingValues(start = 3.dp),
-                                    ),
+                                    Modifier.size(15.dp).align(Alignment.CenterVertically),
                                 )
                                 Text(
                                     text = type,
