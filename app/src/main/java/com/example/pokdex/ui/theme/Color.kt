@@ -27,6 +27,7 @@ val PsychicBrush = Color(229, 112, 155)
 val RockBrush = Color(178, 160, 97)
 val SteelBrush = Color(137, 161, 176)
 val WaterBrush = Color(83, 154, 226)
+var TransparentBrush = Color(0, 0, 0, 0)
 
 fun convertTypeToColor(type: String): Color {
     when (type.lowercase()) {
