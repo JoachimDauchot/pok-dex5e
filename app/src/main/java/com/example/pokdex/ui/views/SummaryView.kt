@@ -24,8 +24,9 @@ import com.example.pokdex.ui.views.components.MyPokemonIndexCard
 fun SummaryView(
     summaryViewModel: SummaryViewModel = viewModel(factory = SummaryViewModel.Factory),
 ) {
-    var filterText = ""
+    val filterText: String = summaryViewModel.filterText
     val summaries = summaryViewModel.summaries.collectAsState().value
+    val filteredSummaries = summaries.filter { it.name.lowercase().contains(filterText.lowercase()) }
     val lazyListState = rememberLazyListState()
     val modifier = Modifier
         .fillMaxWidth()
@@ -36,10 +37,10 @@ fun SummaryView(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontSize = 30.sp,
         )
-        TextField(value = filterText, onValueChange = { cv -> filterText = cv }, placeholder = { Text(text = "Search...") }, modifier = modifier.height(50.dp), maxLines = 1)
+        TextField(value = filterText, onValueChange = { cv -> summaryViewModel.filterText = cv }, placeholder = { Text(text = "Search...") }, modifier = modifier.height(50.dp), maxLines = 1)
         Divider(thickness = 1.dp)
         LazyColumn(state = lazyListState) {
-            items(items = summaries) {
+            items(items = filteredSummaries) {
                 MyPokemonIndexCard(summary = it, baseUrl = summaryViewModel.baseImgUrl)
             }
         }

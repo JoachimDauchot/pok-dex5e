@@ -1,6 +1,10 @@
 package com.example.pokdex.ui.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -24,6 +28,7 @@ class SummaryViewModel(
         getSummaries()
     }
     val baseImgUrl: String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/"
+    var filterText: String by mutableStateOf("")
     private fun getSummaries() {
         viewModelScope.launch {
             try {
