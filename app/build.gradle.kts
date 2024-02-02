@@ -73,6 +73,9 @@ dependencies {
     testImplementation("androidx.room:room-testing:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+
     implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation("junit:junit:4.13.2")

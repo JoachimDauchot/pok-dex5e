@@ -23,7 +23,7 @@ class SummaryViewModel(
     init {
         getSummaries()
     }
-
+    val baseImgUrl: String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/"
     private fun getSummaries() {
         viewModelScope.launch {
             try {
