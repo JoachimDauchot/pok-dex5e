@@ -1,7 +1,7 @@
 package com.example.pokdex.ui.viewmodels
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,26 +17,21 @@ import com.example.pokdex.model.PokemonSummary
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import java.net.SocketTimeoutException
 
 class SummaryViewModel(
     private val pokemonSummaryRepository: PokemonSummaryRepository,
+    private val context: Context,
 ) : ViewModel() {
     lateinit var summaries: StateFlow<List<PokemonSummary>>
+
     init {
+
         getSummaries()
     }
-    val baseImgUrl: String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/"
+
     var filterText: String by mutableStateOf("")
+
     private fun getSummaries() {
-        viewModelScope.launch {
-            try {
-                pokemonSummaryRepository.refresh()
-            } catch (e: SocketTimeoutException) {
-                Log.i("API", "API is down")
-            }
-        }
         summaries = pokemonSummaryRepository.getSummaries()
             .stateIn(
                 scope = viewModelScope,
@@ -44,12 +39,17 @@ class SummaryViewModel(
                 initialValue = listOf(PokemonSummary()),
             )
     }
+    fun getImage(filename: String): Bitmap {
+        return pokemonSummaryRepository.retrieveImage(context, filename)
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as PokedexApplication
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
-                SummaryViewModel(pokemonSummaryRepository)
+                val context = application.container.context
+                SummaryViewModel(pokemonSummaryRepository, context)
             }
         }
     }
