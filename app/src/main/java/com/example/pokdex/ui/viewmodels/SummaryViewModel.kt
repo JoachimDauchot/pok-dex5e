@@ -1,6 +1,5 @@
 package com.example.pokdex.ui.viewmodels
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.stateIn
 
 class SummaryViewModel(
     private val pokemonSummaryRepository: PokemonSummaryRepository,
-    private val context: Context,
 ) : ViewModel() {
     lateinit var summaries: StateFlow<List<PokemonSummary>>
 
@@ -40,7 +38,7 @@ class SummaryViewModel(
             )
     }
     fun getImage(filename: String): Bitmap {
-        return pokemonSummaryRepository.retrieveImage(context, filename)
+        return pokemonSummaryRepository.retrieveImage(filename)
     }
 
     companion object {
@@ -48,8 +46,7 @@ class SummaryViewModel(
             initializer {
                 val application = this[APPLICATION_KEY] as PokedexApplication
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
-                val context = application.container.context
-                SummaryViewModel(pokemonSummaryRepository, context)
+                SummaryViewModel(pokemonSummaryRepository)
             }
         }
     }

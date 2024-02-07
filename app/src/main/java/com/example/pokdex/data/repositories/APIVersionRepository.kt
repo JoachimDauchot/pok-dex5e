@@ -38,13 +38,13 @@ class PersistAPIVersionToDb(
     }
 
     override suspend fun versionIsUpToDate(): Boolean {
-        var currentVersion: APIVersion = getVersion()
-        var newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
-        if (currentVersion.version.equals(newVersion.version)) {
-            return true
+        val currentVersion: APIVersion = getVersion()
+        val newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
+        return if (currentVersion.version == newVersion.version) {
+            true
         } else {
             insert(newVersion)
-            return false
+            false
         }
     }
 }

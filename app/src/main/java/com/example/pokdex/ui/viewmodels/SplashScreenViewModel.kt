@@ -1,8 +1,8 @@
 package com.example.pokdex.ui.viewmodels
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -21,15 +21,14 @@ import kotlinx.coroutines.withContext
 class SplashScreenViewModel(
     private val apiVersionRepository: APIVersionRepository,
     private val pokemonSummaryRepository: PokemonSummaryRepository,
-    private val context: Context,
 ) : ViewModel() {
 
     var version: String by mutableStateOf("")
     var statusText: String by mutableStateOf("")
     var statusProgressText: String by mutableStateOf("")
     var statusSubtext: String by mutableStateOf("")
-    var progress: Float by mutableStateOf(0f)
-    var summariesIndeces: List<Int> by mutableStateOf(emptyList())
+    var progress: Float by mutableFloatStateOf(0f)
+    private var summariesIndices: List<Int> by mutableStateOf(emptyList())
     init {
         getApiVersion()
     }
@@ -47,12 +46,12 @@ class SplashScreenViewModel(
                     statusText = "Downloading summaries"
                     statusSubtext = "This may take a while on first startup"
                     // persist summaries and request the indeces for image retrieval
-                    summariesIndeces = pokemonSummaryRepository.refresh(context)
+                    summariesIndices = pokemonSummaryRepository.refresh()
                     // retrieve images and persist to internal storage
-                    val count: Int = summariesIndeces.count()
-                    for (index in summariesIndeces) {
+                    val count: Int = summariesIndices.count()
+                    for (index in summariesIndices) {
                         statusProgressText = "($index / $count)"
-                        pokemonSummaryRepository.saveImageToInternalStorage(context, "$index.png")
+                        pokemonSummaryRepository.saveImageToInternalStorage("$index.png")
 
                         progress = index.toFloat() / count.toFloat()
                     }
@@ -70,8 +69,7 @@ class SplashScreenViewModel(
                 val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PokedexApplication
                 val apiVersionRepository = application.container.apiVersionRepository
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
-                val context = application.container.context
-                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository, context)
+                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository)
             }
         }
     }

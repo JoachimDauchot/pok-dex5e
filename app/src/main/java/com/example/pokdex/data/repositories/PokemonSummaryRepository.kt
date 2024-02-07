@@ -20,14 +20,15 @@ import java.net.URL
 interface PokemonSummaryRepository {
     suspend fun insert(item: PokemonSummary)
     fun getSummaries(): Flow<List<PokemonSummary>>
-    fun retrieveImage(context: Context, fileName: String): Bitmap
-    suspend fun refresh(context: Context): ArrayList<Int>
-    suspend fun saveImageToInternalStorage(context: Context, fileName: String)
+    fun retrieveImage(fileName: String): Bitmap
+    suspend fun refresh(): ArrayList<Int>
+    suspend fun saveImageToInternalStorage(fileName: String)
 }
 
 class PersistPokemonSummaryToDb(
     private val pokemonSummaryDAO: PokemonSummaryDAO,
     private val pokemonSummaryService: PokemonSummaryService,
+    private val context: Context,
 ) : PokemonSummaryRepository {
     override suspend fun insert(item: PokemonSummary) {
         pokemonSummaryDAO.insert(item.asDbPokemonSummary())
@@ -38,8 +39,8 @@ class PersistPokemonSummaryToDb(
         }
         return result
     }
-    override suspend fun refresh(context: Context): ArrayList<Int> {
-        var indices: ArrayList<Int> = ArrayList<Int>()
+    override suspend fun refresh(): ArrayList<Int> {
+        val indices: ArrayList<Int> = ArrayList<Int>()
         indices.clear()
         pokemonSummaryService.getSummariesAsFlow().collect {
             for (summary in it.asDomainObjects()) {
@@ -51,17 +52,17 @@ class PersistPokemonSummaryToDb(
         return indices
     }
 
-    override suspend fun saveImageToInternalStorage(context: Context, fileName: String) {
+    override suspend fun saveImageToInternalStorage(fileName: String) {
         try {
-            var url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$fileName")
-            var bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            val url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$fileName")
+            val bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             ImageStorageManager.saveToInternalStorage(context = context, bitmap, fileName)
         } catch (e: Exception) {
             Log.i("image saving", "Failed to retrieve and save image $fileName")
         }
     }
 
-    override fun retrieveImage(context: Context, fileName: String): Bitmap {
+    override fun retrieveImage(fileName: String): Bitmap {
         try {
             val image: Bitmap? = ImageStorageManager.getImageFromInternalStorage(context, fileName)
             if (image != null) {

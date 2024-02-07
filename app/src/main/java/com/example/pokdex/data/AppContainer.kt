@@ -59,7 +59,7 @@ class DefaultAppContainer(
 
     // inject repositories
     override val pokemonSummaryRepository: PokemonSummaryRepository by lazy {
-        PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonSummaryService = pokemonSummaryService)
+        PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonSummaryService = pokemonSummaryService, context = applicationContext)
     }
 
     override val apiVersionRepository: APIVersionRepository by lazy {
