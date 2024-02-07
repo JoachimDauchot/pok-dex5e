@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
 import com.example.pokdex.data.repositories.APIVersionRepository
+import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
 import com.example.pokdex.model.APIVersion
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 class SplashScreenViewModel(
     private val apiVersionRepository: APIVersionRepository,
     private val pokemonSummaryRepository: PokemonSummaryRepository,
+    private val moveRepository: MoveRepository,
 ) : ViewModel() {
 
     var version: MutableStateFlow<String> = MutableStateFlow("")
@@ -56,16 +58,17 @@ class SplashScreenViewModel(
                     val count: Int = summariesIndices.count()
                     for (index in summariesIndices) {
                         statusProgressText = "($index / $count)"
-                        pokemonSummaryRepository.saveImageToInternalStorage("$index.png")
+                        pokemonSummaryRepository.saveImageToInternalStorage("summary_$index.png", "$index.png")
 
                         progress = index.toFloat() / count.toFloat()
                     }
                     // update moves
-                    version = MutableStateFlow("Updating moves")
+                    version = MutableStateFlow("Updating moves set")
+                    moveRepository.retrieveMoves()
                     // update abilities
-                    version = MutableStateFlow("Updating abilities")
+                    version = MutableStateFlow("Updating abilities set")
                     // updating pokemon details
-                    version = MutableStateFlow("Updating Pokemons")
+                    version = MutableStateFlow("Updating Pokemon details")
 
                     apiVersionRepository.setDownloaded(true)
 
@@ -82,7 +85,8 @@ class SplashScreenViewModel(
                 val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PokedexApplication
                 val apiVersionRepository = application.container.apiVersionRepository
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
-                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository)
+                val moveRepository = application.container.moveRepository
+                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository, moveRepository)
             }
         }
     }

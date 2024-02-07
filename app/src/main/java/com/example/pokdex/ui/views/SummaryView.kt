@@ -41,7 +41,7 @@ fun SummaryView(
         Divider(thickness = 1.dp)
         LazyColumn(state = lazyListState) {
             items(items = filteredSummaries) {
-                MyPokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("${it.index}.png"))
+                MyPokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("summary_${it.index}.png"))
             }
         }
     }

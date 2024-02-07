@@ -1,13 +1,14 @@
 package com.example.pokdex.data.database.dbObjects
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.example.pokdex.model.PokemonSummary
 
-@Entity(tableName = "pokemonsummaries")
+@Entity(tableName = "pokemonsummaries", primaryKeys = ["index", "name"])
 data class DbPokemonSummary(
-    @PrimaryKey()
+    @ColumnInfo(name = "index")
     var index: Int = 0,
+    @ColumnInfo(name = "name")
     var name: String = "",
     var speciesRating: Float = 0.0f,
     var types: List<String> = emptyList(),

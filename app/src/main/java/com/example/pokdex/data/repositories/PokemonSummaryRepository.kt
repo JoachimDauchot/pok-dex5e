@@ -15,6 +15,7 @@ import com.example.pokdex.data.network.getSummariesAsFlow
 import com.example.pokdex.model.PokemonSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.net.SocketTimeoutException
 import java.net.URL
 
 interface PokemonSummaryRepository {
@@ -22,7 +23,7 @@ interface PokemonSummaryRepository {
     fun getSummaries(): Flow<List<PokemonSummary>>
     fun retrieveImage(fileName: String): Bitmap
     suspend fun refresh(): ArrayList<Int>
-    suspend fun saveImageToInternalStorage(fileName: String)
+    suspend fun saveImageToInternalStorage(fileName: String, urlAddon: String)
 }
 
 class PersistPokemonSummaryToDb(
@@ -42,19 +43,23 @@ class PersistPokemonSummaryToDb(
     override suspend fun refresh(): ArrayList<Int> {
         val indices: ArrayList<Int> = ArrayList<Int>()
         indices.clear()
-        pokemonSummaryService.getSummariesAsFlow().collect {
-            for (summary in it.asDomainObjects()) {
-                insert(summary)
-                indices.add(summary.index)
-                println(summary)
+        try {
+            pokemonSummaryService.getSummariesAsFlow().collect {
+                for (summary in it.asDomainObjects()) {
+                    insert(summary)
+                    indices.add(summary.index)
+                    println(summary)
+                }
             }
+        } catch (e: SocketTimeoutException) {
+            Log.i("API", "API is down")
         }
         return indices
     }
 
-    override suspend fun saveImageToInternalStorage(fileName: String) {
+    override suspend fun saveImageToInternalStorage(fileName: String, urlAddon: String) {
         try {
-            val url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$fileName")
+            val url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$urlAddon")
             val bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             ImageStorageManager.saveToInternalStorage(context = context, bitmap, fileName)
         } catch (e: Exception) {

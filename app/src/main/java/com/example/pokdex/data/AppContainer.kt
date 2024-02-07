@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Room
 import com.example.pokdex.data.database.PokedexDatabase
 import com.example.pokdex.data.database.dao.APIVersionDAO
+import com.example.pokdex.data.database.dao.MoveDAO
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.network.APIVersionService
+import com.example.pokdex.data.network.MoveService
 import com.example.pokdex.data.network.PokemonSummaryService
 import com.example.pokdex.data.repositories.APIVersionRepository
+import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PersistAPIVersionToDb
+import com.example.pokdex.data.repositories.PersistMoveToDB
 import com.example.pokdex.data.repositories.PersistPokemonSummaryToDb
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -19,6 +23,7 @@ import retrofit2.Retrofit
 interface AppContainer {
     val pokemonSummaryRepository: PokemonSummaryRepository
     val apiVersionRepository: APIVersionRepository
+    val moveRepository: MoveRepository
 }
 
 class DefaultAppContainer(
@@ -42,6 +47,10 @@ class DefaultAppContainer(
         retrofit.create(APIVersionService::class.java)
     }
 
+    private val moveService by lazy {
+        retrofit.create(MoveService::class.java)
+    }
+
     // create db
     private val pokedexDB: PokedexDatabase by lazy {
         Room.databaseBuilder(applicationContext, PokedexDatabase::class.java, name = "pokedex_database")
@@ -57,6 +66,10 @@ class DefaultAppContainer(
         pokedexDB.aPIVersionDAO()
     }
 
+    private val moveDAO: MoveDAO by lazy {
+        pokedexDB.moveDAO()
+    }
+
     // inject repositories
     override val pokemonSummaryRepository: PokemonSummaryRepository by lazy {
         PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonSummaryService = pokemonSummaryService, context = applicationContext)
@@ -64,5 +77,9 @@ class DefaultAppContainer(
 
     override val apiVersionRepository: APIVersionRepository by lazy {
         PersistAPIVersionToDb(apiVersionDAO = apiVersionDAO, apiVersionService = apiVersionService)
+    }
+
+    override val moveRepository: MoveRepository by lazy {
+        PersistMoveToDB(moveDAO = moveDAO, moveService = moveService)
     }
 }
