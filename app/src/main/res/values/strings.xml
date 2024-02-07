@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pokédex</string>
+    <string name="PokedexSummaries">Pokedex Summaries</string>
+    <string name="SplashScreen">SplashScreen</string>
 </resources>

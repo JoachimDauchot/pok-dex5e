@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +45,7 @@ fun MyPokemonIndexCard(summary: PokemonSummary, bitmap: Bitmap) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
 
     ) {
-        Row(modifier = Modifier.padding(5.dp).fillMaxWidth()) {
+        Row(modifier = Modifier.padding(5.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {
                 Image(bitmap.asImageBitmap(), "pokemonPixelArt", modifier = Modifier.fillMaxSize().align(Alignment.Center))
             }

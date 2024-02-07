@@ -63,6 +63,23 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
+    // NAVIGATION
+    val nav_version = "2.7.6"
+    // Java language implementation
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
+    // Kotlin
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    // Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    // Jetpack Compose Integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.navigation:navigation-runtime-ktx:$nav_version")
+
+    // DATABASE
     val room_version = "2.5.0"
     implementation("androidx.room:room-runtime:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
@@ -74,8 +91,6 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-
     implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation("junit:junit:4.13.2")

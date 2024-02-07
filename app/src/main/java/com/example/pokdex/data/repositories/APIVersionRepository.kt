@@ -1,10 +1,12 @@
 package com.example.pokdex.data.repositories
 
+import android.util.Log
 import com.example.pokdex.data.database.dao.APIVersionDAO
 import com.example.pokdex.data.database.dbObjects.asDbObject
 import com.example.pokdex.data.database.dbObjects.asDomainObject
 import com.example.pokdex.data.network.APIVersionService
 import com.example.pokdex.model.APIVersion
+import java.net.SocketTimeoutException
 
 interface APIVersionRepository {
     suspend fun insert(item: APIVersion)
@@ -39,12 +41,18 @@ class PersistAPIVersionToDb(
 
     override suspend fun versionIsUpToDate(): Boolean {
         val currentVersion: APIVersion = getVersion()
-        val newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
-        return if (currentVersion.version == newVersion.version) {
+
+        return try {
+            val newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
+            if (currentVersion.version == newVersion.version) {
+                true
+            } else {
+                insert(newVersion)
+                false
+            }
+        } catch (e: SocketTimeoutException) {
+            Log.i("API", "API is down")
             true
-        } else {
-            insert(newVersion)
-            false
         }
     }
 }

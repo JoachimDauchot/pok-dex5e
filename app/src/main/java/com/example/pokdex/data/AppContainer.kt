@@ -17,7 +17,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface AppContainer {
-    val context: Context
     val pokemonSummaryRepository: PokemonSummaryRepository
     val apiVersionRepository: APIVersionRepository
 }
@@ -25,6 +24,7 @@ interface AppContainer {
 class DefaultAppContainer(
     private val applicationContext: Context,
 ) : AppContainer {
+
     private val baseUrl = "http://10.0.2.2:5262"
     private var retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(
@@ -64,10 +64,5 @@ class DefaultAppContainer(
 
     override val apiVersionRepository: APIVersionRepository by lazy {
         PersistAPIVersionToDb(apiVersionDAO = apiVersionDAO, apiVersionService = apiVersionService)
-    }
-
-    // reveal app context
-    override val context: Context by lazy {
-        applicationContext
     }
 }

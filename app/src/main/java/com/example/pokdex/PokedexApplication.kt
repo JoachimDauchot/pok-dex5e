@@ -9,6 +9,11 @@ class PokedexApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        appInstance = this
         container = DefaultAppContainer(applicationContext)
+    }
+    companion object {
+        lateinit var appInstance: PokedexApplication
+            private set
     }
 }

@@ -15,6 +15,7 @@ import com.example.pokdex.data.repositories.APIVersionRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
 import com.example.pokdex.model.APIVersion
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -23,11 +24,12 @@ class SplashScreenViewModel(
     private val pokemonSummaryRepository: PokemonSummaryRepository,
 ) : ViewModel() {
 
-    var version: String by mutableStateOf("")
-    var statusText: String by mutableStateOf("")
+    var version: MutableStateFlow<String> = MutableStateFlow("")
+    var statusText: MutableStateFlow<String> = MutableStateFlow("")
     var statusProgressText: String by mutableStateOf("")
     var statusSubtext: String by mutableStateOf("")
     var progress: Float by mutableFloatStateOf(0f)
+    var isFinished: Boolean by mutableStateOf(false)
     private var summariesIndices: List<Int> by mutableStateOf(emptyList())
     init {
         getApiVersion()
@@ -37,13 +39,16 @@ class SplashScreenViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val apiVersion: APIVersion = apiVersionRepository.getVersion()
+                version = MutableStateFlow("Dataset version: ${apiVersion.version}")
+                statusText = MutableStateFlow("Checking for updates")
                 if (apiVersionRepository.versionIsUpToDate() && apiVersion.wasDownloadedFully) {
                     Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
+                    progress = 1f
                 } else {
                     Log.i("versionCheck", "Version is NOT up to date")
                     // some text to display
-                    version = "Dataset version: ${apiVersionRepository.getVersion().version}"
-                    statusText = "Downloading summaries"
+                    version = MutableStateFlow("Dataset version: ${apiVersionRepository.getVersion().version}")
+                    statusText = MutableStateFlow("Updating summaries")
                     statusSubtext = "This may take a while on first startup"
                     // persist summaries and request the indeces for image retrieval
                     summariesIndices = pokemonSummaryRepository.refresh()
@@ -55,10 +60,18 @@ class SplashScreenViewModel(
 
                         progress = index.toFloat() / count.toFloat()
                     }
+                    // update moves
+                    version = MutableStateFlow("Updating moves")
+                    // update abilities
+                    version = MutableStateFlow("Updating abilities")
+                    // updating pokemon details
+                    version = MutableStateFlow("Updating Pokemons")
+
                     apiVersionRepository.setDownloaded(true)
-                    statusText = "Download completed"
+
+                    statusText = MutableStateFlow("Download completed")
                 }
-                version = "Dataset version: ${apiVersionRepository.getVersion().version}"
+                isFinished = true
             }
         }
     }
