@@ -12,11 +12,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 @Database(entities = [DbPokemonSummary::class, DbAPIVersion::class], version = 1)
-@TypeConverters(*[ListConverter::class])
+@TypeConverters(ListConverter::class)
 abstract class PokedexDatabase : RoomDatabase() {
     abstract fun pokemonSummaryDAO(): PokemonSummaryDAO
     abstract fun aPIVersionDAO(): APIVersionDAO
 }
 
-inline fun <reified T> Gson.fromJson(json: String) =
+inline fun <reified T> Gson.fromJson(json: String): T =
     fromJson<T>(json, object : TypeToken<T>() {}.type)

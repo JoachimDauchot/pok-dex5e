@@ -18,6 +18,6 @@ fun List<PokemonSummaryDTO>.asDomainObjects(): List<PokemonSummary> {
     return modelList
 }
 
-fun PokemonSummaryDTO.asDomainObject(): PokemonSummary {
-    return PokemonSummary(name = name, index = index, speciesRating = speciesRating, types = types)
-}
+// fun PokemonSummaryDTO.asDomainObject(): PokemonSummary {
+//    return PokemonSummary(name = name, index = index, speciesRating = speciesRating, types = types)
+// }

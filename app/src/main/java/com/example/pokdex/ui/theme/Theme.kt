@@ -20,7 +20,7 @@ private val ColorScheme = darkColorScheme(
 )
 
 @Composable
-fun PokédexTheme(
+fun PokedexTheme(
     content: @Composable () -> Unit,
 ) {
     val colorScheme = ColorScheme
