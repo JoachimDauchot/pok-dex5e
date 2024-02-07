@@ -9,12 +9,13 @@ data class DbAPIVersion(
     @PrimaryKey()
     var id: Int = 1,
     var version: String = "",
+    var wasDownloadedFully: Boolean = false,
 )
 
 fun APIVersion.asDbObject(): DbAPIVersion {
-    return DbAPIVersion(id = 1, version = version)
+    return DbAPIVersion(id = 1, version = version, wasDownloadedFully = false)
 }
 
 fun DbAPIVersion.asDomainObject(): APIVersion {
-    return APIVersion(version = version)
+    return APIVersion(version = version, wasDownloadedFully = wasDownloadedFully)
 }

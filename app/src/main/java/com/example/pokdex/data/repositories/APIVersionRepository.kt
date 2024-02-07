@@ -8,8 +8,8 @@ import com.example.pokdex.model.APIVersion
 
 interface APIVersionRepository {
     suspend fun insert(item: APIVersion)
+    suspend fun setDownloaded(wasDownloadedFully: Boolean)
     suspend fun getVersion(): APIVersion
-
     suspend fun versionIsUpToDate(): Boolean
 }
 
@@ -21,14 +21,26 @@ class PersistAPIVersionToDb(
         apiVersionDAO.insert(item.asDbObject())
     }
 
+    override suspend fun setDownloaded(wasDownloadedFully: Boolean) {
+        val apiVersion = apiVersionDAO.getAPIVersion()
+        if (apiVersion != null) {
+            apiVersion.wasDownloadedFully = wasDownloadedFully
+            apiVersionDAO.insert(apiVersion)
+        }
+    }
+
     override suspend fun getVersion(): APIVersion {
-        return apiVersionDAO.getAPIVersion().asDomainObject()
+        val apiVersion = apiVersionDAO.getAPIVersion()
+        if (apiVersion != null) {
+            return apiVersion.asDomainObject()
+        }
+        return APIVersion("0.0.0", wasDownloadedFully = false)
     }
 
     override suspend fun versionIsUpToDate(): Boolean {
         var currentVersion: APIVersion = getVersion()
-        var newVersion = APIVersion(apiVersionService.getAPIVersion())
-        if (currentVersion.equals(newVersion)) {
+        var newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
+        if (currentVersion.version.equals(newVersion.version)) {
             return true
         } else {
             insert(newVersion)

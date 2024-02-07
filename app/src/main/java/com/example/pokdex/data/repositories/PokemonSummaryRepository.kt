@@ -21,7 +21,8 @@ interface PokemonSummaryRepository {
     suspend fun insert(item: PokemonSummary)
     fun getSummaries(): Flow<List<PokemonSummary>>
     fun retrieveImage(context: Context, fileName: String): Bitmap
-    suspend fun refresh(context: Context)
+    suspend fun refresh(context: Context): ArrayList<Int>
+    suspend fun saveImageToInternalStorage(context: Context, fileName: String)
 }
 
 class PersistPokemonSummaryToDb(
@@ -37,21 +38,29 @@ class PersistPokemonSummaryToDb(
         }
         return result
     }
-    override suspend fun refresh(context: Context) {
+    override suspend fun refresh(context: Context): ArrayList<Int> {
+        var indices: ArrayList<Int> = ArrayList<Int>()
+        indices.clear()
         pokemonSummaryService.getSummariesAsFlow().collect {
             for (summary in it.asDomainObjects()) {
                 insert(summary)
+                indices.add(summary.index)
                 println(summary)
-                try {
-                    var url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/${summary.index}.png")
-                    var bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                    ImageStorageManager.saveToInternalStorage(context = context, bitmap, "${summary.index}.png")
-                } catch (e: Exception) {
-                    Log.i("image saving", "Failed to retrieve and save image ${summary.index}")
-                }
             }
         }
+        return indices
     }
+
+    override suspend fun saveImageToInternalStorage(context: Context, fileName: String) {
+        try {
+            var url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$fileName")
+            var bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            ImageStorageManager.saveToInternalStorage(context = context, bitmap, fileName)
+        } catch (e: Exception) {
+            Log.i("image saving", "Failed to retrieve and save image $fileName")
+        }
+    }
+
     override fun retrieveImage(context: Context, fileName: String): Bitmap {
         try {
             val image: Bitmap? = ImageStorageManager.getImageFromInternalStorage(context, fileName)

@@ -3,6 +3,11 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <base-config cleartextTrafficPermitted="true">
+            <trust-anchors>
+                <certificates src="system" />
+            </trust-anchors>
+        </base-config>
     </domain-config>
 
 </network-security-config>

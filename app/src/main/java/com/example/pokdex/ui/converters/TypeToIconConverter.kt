@@ -2,7 +2,6 @@ package com.example.pokdex.ui.converters
 
 import com.example.pokdex.R
 
-
 fun typeToIconConverter(type: String): Int {
     when (type.lowercase()) {
         "bug" -> return R.drawable.bug

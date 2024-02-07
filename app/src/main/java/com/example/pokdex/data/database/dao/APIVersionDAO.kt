@@ -12,5 +12,5 @@ interface APIVersionDAO {
     suspend fun insert(item: DbAPIVersion)
 
     @Query("SELECT * from apiversion LIMIT 1")
-    fun getAPIVersion(): DbAPIVersion
+    fun getAPIVersion(): DbAPIVersion?
 }

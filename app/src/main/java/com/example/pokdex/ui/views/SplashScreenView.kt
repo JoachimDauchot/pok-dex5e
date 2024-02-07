@@ -18,13 +18,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokdex.R
+import com.example.pokdex.ui.theme.WaterBrush
 import com.example.pokdex.ui.viewmodels.SplashScreenViewModel
 
 @Composable
@@ -46,8 +46,9 @@ fun SplashScreenView(
             contentDescription = "LoadingIcon",
             modifier = Modifier.graphicsLayer { rotationZ = angle },
         )
-        LinearProgressIndicator(progress = splashScreenViewModel.progress, modifier = Modifier.fillMaxWidth().height(100.dp).padding(20.dp), color = Color.Blue)
+        LinearProgressIndicator(progress = splashScreenViewModel.progress, modifier = Modifier.fillMaxWidth().height(100.dp).padding(20.dp), color = WaterBrush)
         Text(text = splashScreenViewModel.statusText, fontSize = 30.sp)
+        Text(text = splashScreenViewModel.statusProgressText, fontSize = 20.sp)
         Text(text = splashScreenViewModel.statusSubtext, fontSize = 15.sp)
         Text(text = splashScreenViewModel.version)
     }

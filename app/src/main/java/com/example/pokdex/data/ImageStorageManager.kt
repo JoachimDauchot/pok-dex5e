@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import java.io.File
 import java.io.FileInputStream
-import java.net.URL
 
 class ImageStorageManager {
     companion object {
@@ -17,8 +16,6 @@ class ImageStorageManager {
             Log.i("saver", context.filesDir.absolutePath)
             return context.filesDir.absolutePath
         }
-
-
 
         fun getImageFromInternalStorage(context: Context, imageFileName: String): Bitmap? {
             val directory = context.filesDir

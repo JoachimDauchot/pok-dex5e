@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
 import com.example.pokdex.data.repositories.APIVersionRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
+import com.example.pokdex.model.APIVersion
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +26,10 @@ class SplashScreenViewModel(
 
     var version: String by mutableStateOf("")
     var statusText: String by mutableStateOf("")
+    var statusProgressText: String by mutableStateOf("")
     var statusSubtext: String by mutableStateOf("")
     var progress: Float by mutableStateOf(0f)
+    var summariesIndeces: List<Int> by mutableStateOf(emptyList())
     init {
         getApiVersion()
     }
@@ -34,15 +37,26 @@ class SplashScreenViewModel(
     fun getApiVersion() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                if (apiVersionRepository.versionIsUpToDate()) {
-                    Log.i("versionCheck", "Version is up to date")
+                val apiVersion: APIVersion = apiVersionRepository.getVersion()
+                if (apiVersionRepository.versionIsUpToDate() && apiVersion.wasDownloadedFully) {
+                    Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
                 } else {
                     Log.i("versionCheck", "Version is NOT up to date")
+                    // some text to display
                     version = "Dataset version: ${apiVersionRepository.getVersion().version}"
                     statusText = "Downloading summaries"
                     statusSubtext = "This may take a while on first startup"
-                    pokemonSummaryRepository.refresh(context)
-                    progress = 1f
+                    // persist summaries and request the indeces for image retrieval
+                    summariesIndeces = pokemonSummaryRepository.refresh(context)
+                    // retrieve images and persist to internal storage
+                    val count: Int = summariesIndeces.count()
+                    for (index in summariesIndeces) {
+                        statusProgressText = "($index / $count)"
+                        pokemonSummaryRepository.saveImageToInternalStorage(context, "$index.png")
+
+                        progress = index.toFloat() / count.toFloat()
+                    }
+                    apiVersionRepository.setDownloaded(true)
                     statusText = "Download completed"
                 }
                 version = "Dataset version: ${apiVersionRepository.getVersion().version}"
