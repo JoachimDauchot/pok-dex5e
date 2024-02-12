@@ -21,6 +21,7 @@ data class DbMove(
     var damage: Map<Int, DbDamage> = emptyMap(),
 )
 
+// data classes below are saved on the move table and not seperately
 data class DbDamage(
     var diceAmount: Int,
     var diceMax: Int,

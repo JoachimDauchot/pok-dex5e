@@ -1,11 +1,9 @@
 package com.example.pokdex.data.dtos
 
-import android.util.Log
 import com.example.pokdex.model.Damage
 import com.example.pokdex.model.Move
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 @Serializable
 
@@ -49,7 +47,6 @@ data class DamageDTO(
 )
 
 fun MoveDTO.asDomainObject(): Move {
-    Log.i("MoveDTO", this.toString())
     return Move(
         name = name,
         description = description,

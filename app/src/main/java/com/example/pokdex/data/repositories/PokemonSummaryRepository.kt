@@ -10,7 +10,7 @@ import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.database.dbObjects.asDbPokemonSummary
 import com.example.pokdex.data.database.dbObjects.asDomainObjects
 import com.example.pokdex.data.dtos.asDomainObjects
-import com.example.pokdex.data.network.PokemonSummaryService
+import com.example.pokdex.data.network.PokemonService
 import com.example.pokdex.data.network.getSummariesAsFlow
 import com.example.pokdex.model.PokemonSummary
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +28,7 @@ interface PokemonSummaryRepository {
 
 class PersistPokemonSummaryToDb(
     private val pokemonSummaryDAO: PokemonSummaryDAO,
-    private val pokemonSummaryService: PokemonSummaryService,
+    private val pokemonService: PokemonService,
     private val context: Context,
 ) : PokemonSummaryRepository {
     override suspend fun insert(item: PokemonSummary) {
@@ -44,7 +44,7 @@ class PersistPokemonSummaryToDb(
         val indices: ArrayList<Int> = ArrayList<Int>()
         indices.clear()
         try {
-            pokemonSummaryService.getSummariesAsFlow().collect {
+            pokemonService.getSummariesAsFlow().collect {
                 for (summary in it.asDomainObjects()) {
                     insert(summary)
                     indices.add(summary.index)
