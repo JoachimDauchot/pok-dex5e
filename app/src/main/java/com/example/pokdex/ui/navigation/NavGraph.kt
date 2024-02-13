@@ -11,12 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.pokdex.R
 import com.example.pokdex.ui.navigation.PageOverview.PokedexSummaries
+import com.example.pokdex.ui.navigation.PageOverview.PokemonDetail
 import com.example.pokdex.ui.navigation.PageOverview.SplashScreen
+import com.example.pokdex.ui.views.PokemonDetailView
 import com.example.pokdex.ui.views.SplashScreenView
 import com.example.pokdex.ui.views.SummaryView
 import com.example.pokdex.ui.views.components.PokeScaffold
@@ -42,10 +46,13 @@ object NavGraph {
             startDestination = SplashScreen.name,
         ) {
             composable(PokedexSummaries.name) {
-                PokeScaffold(view = { SummaryView() }, navHostController = navController)
+                PokeScaffold(view = { SummaryView(navigateToPokemon = { navController.navigate("${PokemonDetail.name}/$it") }) }, navHostController = navController)
             }
             composable(SplashScreen.name) {
                 SplashScreenView(navigateToSummaries = { navController.navigate(PokedexSummaries.name) })
+            }
+            composable("${PokemonDetail.name}/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) {
+                PokeScaffold(view = { PokemonDetailView() }, navHostController = navController)
             }
         }
     }

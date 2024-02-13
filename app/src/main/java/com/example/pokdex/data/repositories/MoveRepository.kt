@@ -31,7 +31,7 @@ public class PersistMoveToDB(
                     insert(move.asDomainObject())
                 }
             }
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Exception) {
             Log.i("API", "API is down")
         }
     }

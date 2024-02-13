@@ -1,5 +1,6 @@
 package com.example.pokdex.data.repositories
 
+import android.util.Log
 import com.example.pokdex.data.database.dao.PokemonDetailDAO
 import com.example.pokdex.data.database.dbObjects.asDomainObject
 import com.example.pokdex.data.dtos.asDomainObject
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.map
 
 interface PokemonDetailRepository {
     suspend fun insert(item: PokemonDetail)
-    suspend fun getPokemonDetail(index: Int): Flow<PokemonDetail>
+    fun getPokemonDetail(index: Int): Flow<PokemonDetail>
     suspend fun refresh()
 }
 
@@ -25,17 +26,21 @@ class PersistPokemonDetailToDB(
         pokemonDetailDAO.insert(item.asDbObject())
     }
 
-    override suspend fun getPokemonDetail(index: Int): Flow<PokemonDetail> {
+    override fun getPokemonDetail(index: Int): Flow<PokemonDetail> {
         var pokemon = pokemonDetailDAO.getPokemon(index).map { it.asDomainObject() }
 
         return pokemon
     }
 
     override suspend fun refresh() {
-        pokemonService.getPokemonDetailsAsFlow().collect() {
-            for (pokemon in it) {
-                insert(pokemon.asDomainObject())
+        try {
+            pokemonService.getPokemonDetailsAsFlow().collect() {
+                for (pokemon in it) {
+                    insert(pokemon.asDomainObject())
+                }
             }
+        } catch (e: Exception) {
+            Log.i("API", "API is down")
         }
     }
 }

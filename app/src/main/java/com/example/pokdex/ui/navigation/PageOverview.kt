@@ -6,4 +6,5 @@ import com.example.pokdex.R
 enum class PageOverview(@StringRes val title: Int) {
     SplashScreen(title = R.string.SplashScreen),
     PokedexSummaries(title = R.string.PokedexSummaries),
+    PokemonDetail(title = R.string.PokemonDetail),
 }

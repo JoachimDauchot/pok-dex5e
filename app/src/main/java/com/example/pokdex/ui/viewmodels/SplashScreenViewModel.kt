@@ -35,6 +35,7 @@ class SplashScreenViewModel(
     var progress: Float by mutableFloatStateOf(0f)
     var isFinished: Boolean by mutableStateOf(false)
     private var summariesIndices: List<Int> by mutableStateOf(emptyList())
+
     init {
         getApiVersion()
     }

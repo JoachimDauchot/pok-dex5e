@@ -83,6 +83,8 @@ data class MovesDTO(
 data class EvolveDTO(
     @SerialName("into")
     var into: List<String>,
+    @SerialName("from")
+    var from: List<String>,
     @SerialName("requires")
     var requires: List<String>,
     @SerialName("current_stage")
@@ -146,6 +148,7 @@ fun MovesDTO.asDomainObject(): Moves {
 fun EvolveDTO.asDomainObject(): Evolve {
     return Evolve(
         into = into,
+        from = from,
         requires = requires,
         currentStage = currentStage,
         totalStages = totalStages,

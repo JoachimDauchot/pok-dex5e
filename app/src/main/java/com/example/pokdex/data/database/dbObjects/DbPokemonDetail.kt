@@ -51,6 +51,7 @@ data class DbMoves(
 )
 data class DbEvolve(
     var into: List<String>,
+    var from: List<String>,
     var requires: List<String>,
     var currentStage: Int,
     var totalStages: Int,
@@ -108,6 +109,7 @@ fun DbMoves.asDomainObject(): Moves {
 fun DbEvolve.asDomainObject(): Evolve {
     return Evolve(
         into = into,
+        from = from,
         requires = requires,
         currentStage = currentStage,
         totalStages = totalStages,

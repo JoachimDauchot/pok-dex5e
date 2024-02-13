@@ -50,7 +50,7 @@ class PersistAPIVersionToDb(
                 insert(newVersion)
                 false
             }
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Exception) {
             Log.i("API", "API is down")
             true
         }

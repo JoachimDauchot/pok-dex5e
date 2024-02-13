@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokdex.ui.viewmodels.SummaryViewModel
+import com.example.pokdex.ui.views.components.BusyGif
 import com.example.pokdex.ui.views.components.MyPokemonIndexCard
 
 @Composable
 fun SummaryView(
     summaryViewModel: SummaryViewModel = viewModel(factory = SummaryViewModel.Factory),
+    navigateToPokemon: (Int) -> Unit,
 ) {
     val filterText: String = summaryViewModel.filterText
     val summaries = summaryViewModel.summaries.collectAsState().value
@@ -31,17 +33,21 @@ fun SummaryView(
     val modifier = Modifier
         .fillMaxWidth()
         .padding(5.dp)
-    Column(modifier = modifier) {
-        Text(
-            text = "Pokédex 5E",
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            fontSize = 30.sp,
-        )
-        TextField(value = filterText, onValueChange = { cv -> summaryViewModel.filterText = cv }, placeholder = { Text(text = "Search...") }, modifier = modifier.height(50.dp), maxLines = 1)
-        Divider(thickness = 1.dp)
-        LazyColumn(state = lazyListState) {
-            items(items = filteredSummaries) {
-                MyPokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("summary_${it.index}.png"))
+    if (summaries.isEmpty()) {
+        BusyGif()
+    } else {
+        Column(modifier = modifier) {
+            Text(
+                text = "Pokédex 5E",
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                fontSize = 30.sp,
+            )
+            TextField(value = filterText, onValueChange = { cv -> summaryViewModel.filterText = cv }, placeholder = { Text(text = "Search...") }, modifier = modifier.height(50.dp), maxLines = 1)
+            Divider(thickness = 1.dp)
+            LazyColumn(state = lazyListState) {
+                items(items = filteredSummaries) {
+                    MyPokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("summary_${it.index}.png"), navigateToPokemon = navigateToPokemon)
+                }
             }
         }
     }

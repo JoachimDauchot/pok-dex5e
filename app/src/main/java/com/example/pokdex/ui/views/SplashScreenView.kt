@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokdex.ui.theme.WaterBrush
 import com.example.pokdex.ui.viewmodels.SplashScreenViewModel
-import com.example.pokdex.ui.views.components.BusySpinner
+import com.example.pokdex.ui.views.components.BusyGif
 
 @Composable
 fun SplashScreenView(
@@ -25,7 +25,7 @@ fun SplashScreenView(
     navigateToSummaries: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        BusySpinner()
+        BusyGif()
         LinearProgressIndicator(progress = splashScreenViewModel.progress, modifier = Modifier.fillMaxWidth().height(100.dp).padding(20.dp), color = WaterBrush)
         Text(text = splashScreenViewModel.statusText.collectAsState().value, fontSize = 30.sp)
         Text(text = splashScreenViewModel.statusProgressText, fontSize = 20.sp)

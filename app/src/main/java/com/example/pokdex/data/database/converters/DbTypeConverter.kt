@@ -78,7 +78,7 @@ class DbTypeConverter {
         return try {
             Gson().fromJson<DbEvolve>(value)
         } catch (e: Exception) {
-            DbEvolve(emptyList(), emptyList(), 0, 0, 0, 0, "")
+            DbEvolve(emptyList(), emptyList(), emptyList(), 0, 0, 0, 0, "")
         }
     }
 }
