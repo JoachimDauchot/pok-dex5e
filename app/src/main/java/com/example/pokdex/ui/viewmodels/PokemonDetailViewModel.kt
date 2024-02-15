@@ -13,8 +13,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
+import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PokemonDetailRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
+import com.example.pokdex.model.Move
 import com.example.pokdex.model.PokemonDetail
 import com.example.pokdex.model.PokemonSummary
 import kotlinx.coroutines.flow.first
@@ -23,18 +25,23 @@ import kotlinx.coroutines.launch
 class PokemonDetailViewModel(
     private val pokemonDetailRepository: PokemonDetailRepository,
     private val pokemonSummaryRepository: PokemonSummaryRepository,
+    private val moveRepository: MoveRepository,
     savedStateHandle: SavedStateHandle,
 
 ) : ViewModel() {
     private val id: Int = checkNotNull(savedStateHandle["id"])
     var isLoading: Boolean by mutableStateOf(true)
     var pokemon: PokemonDetail by mutableStateOf(PokemonDetail())
-    var summaries: MutableMap<String,PokemonSummary> by mutableStateOf(mutableMapOf())
+    var summaries: MutableMap<String, PokemonSummary> by mutableStateOf(mutableMapOf())
+    var startingMoves: List<Move> by mutableStateOf(listOf())
+    var movesPerLevel: Map<Int, List<Move>> by mutableStateOf(mutableMapOf())
 
     init {
         viewModelScope.launch {
             isLoading = true
             getPokemon()
+            getStartingMoves()
+            getMovesPerLevel()
             getSummaries()
             isLoading = false
         }
@@ -46,6 +53,14 @@ class PokemonDetailViewModel(
 
     fun getSummaryImage(filename: String): Bitmap {
         return pokemonSummaryRepository.retrieveImage(filename)
+    }
+
+    private suspend fun getStartingMoves() {
+        startingMoves = pokemon.moves.startingMoves.map { moveName -> moveRepository.getMove(moveName) }
+    }
+
+    private suspend fun getMovesPerLevel() {
+        movesPerLevel = pokemon.moves.level.mapValues { entry -> entry.value.map { moveName -> moveRepository.getMove(moveName) } }.toSortedMap()
     }
 
     private suspend fun getSummaries() {
@@ -69,7 +84,8 @@ class PokemonDetailViewModel(
                 val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PokedexApplication
                 val pokemonDetailRepository = application.container.pokemonDetailRepository
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
-                PokemonDetailViewModel(pokemonDetailRepository, pokemonSummaryRepository, this.createSavedStateHandle())
+                val moveRepository = application.container.moveRepository
+                PokemonDetailViewModel(pokemonDetailRepository, pokemonSummaryRepository, moveRepository, this.createSavedStateHandle())
             }
         }
     }

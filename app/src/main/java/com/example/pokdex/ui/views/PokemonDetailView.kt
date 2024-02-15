@@ -26,6 +26,7 @@ import com.example.pokdex.ui.viewmodels.PokemonDetailViewModel
 import com.example.pokdex.ui.views.components.BusyGif
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailAbilityScore
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailEvolutions
+import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailMoves
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailTop
 
 @Composable
@@ -61,7 +62,7 @@ fun PokemonDetailView(
                 when (tabIndex) {
                     0 -> PokemonDetailAbilityScore(pokemon.attributes, pokemon.hitPoints, pokemon.armorClass)
                     1 -> Box(modifier = Modifier)
-                    2 -> Box(modifier = Modifier)
+                    2 -> PokemonDetailMoves(pokemonDetailViewModel)
                     3 -> PokemonDetailEvolutions(pokemonDetailViewModel, navigateToPokemon)
                 }
             }

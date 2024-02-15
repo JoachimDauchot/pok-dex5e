@@ -13,5 +13,5 @@ interface MoveDAO {
     suspend fun insert(item: DbMove)
 
     @Query("SELECT * from moves WHERE name = :name ")
-    fun getMove(name: String): Flow<DbMove>
+    suspend fun getMove(name: String): DbMove
 }
