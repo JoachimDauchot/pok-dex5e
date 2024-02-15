@@ -37,7 +37,7 @@ import com.example.pokdex.ui.theme.TransparentBrush
 import com.example.pokdex.ui.theme.convertTypeToColor
 
 @Composable
-fun MyPokemonIndexCard(summary: PokemonSummary, bitmap: Bitmap, navigateToPokemon: (Int) -> Unit) {
+fun PokemonIndexCard(summary: PokemonSummary, bitmap: Bitmap, navigateToPokemon: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

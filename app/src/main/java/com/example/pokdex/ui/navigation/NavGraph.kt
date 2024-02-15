@@ -28,7 +28,7 @@ import com.example.pokdex.ui.views.components.PokeScaffold
 object NavGraph {
     @Composable
     fun NavBar(navController: NavHostController) {
-        NavigationBar {
+        NavigationBar(modifier = Modifier.height(60.dp)) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             NavigationBarItem(
@@ -52,7 +52,7 @@ object NavGraph {
                 SplashScreenView(navigateToSummaries = { navController.navigate(PokedexSummaries.name) })
             }
             composable("${PokemonDetail.name}/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) {
-                PokeScaffold(view = { PokemonDetailView() }, navHostController = navController)
+                PokeScaffold(view = { PokemonDetailView(navigateToPokemon = {navController.navigate("${PokemonDetail.name}/$it") }) }, navHostController = navController)
             }
         }
     }

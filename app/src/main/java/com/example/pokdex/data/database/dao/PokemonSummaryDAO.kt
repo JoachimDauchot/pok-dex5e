@@ -14,4 +14,7 @@ interface PokemonSummaryDAO {
 
     @Query("SELECT * from pokemonsummaries ORDER BY `index` ASC")
     fun getSummaries(): Flow<List<DbPokemonSummary>>
+
+    @Query("SELECT * from pokemonsummaries WHERE name = :name LIMIT 1")
+    suspend fun getSummary(name: String): DbPokemonSummary
 }

@@ -8,6 +8,7 @@ import com.example.pokdex.R
 import com.example.pokdex.data.ImageStorageManager
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.database.dbObjects.asDbPokemonSummary
+import com.example.pokdex.data.database.dbObjects.asDomainObject
 import com.example.pokdex.data.database.dbObjects.asDomainObjects
 import com.example.pokdex.data.dtos.asDomainObjects
 import com.example.pokdex.data.network.PokemonService
@@ -23,6 +24,8 @@ interface PokemonSummaryRepository {
     fun getSummaries(): Flow<List<PokemonSummary>>
     fun retrieveImage(fileName: String): Bitmap
     suspend fun refresh(): ArrayList<Int>
+
+    suspend fun getSummary(name: String): PokemonSummary
     suspend fun saveImageToInternalStorage(fileName: String, urlAddon: String)
 }
 
@@ -39,6 +42,11 @@ class PersistPokemonSummaryToDb(
             it.asDomainObjects()
         }
         return result
+    }
+
+    override suspend fun getSummary(name: String): PokemonSummary {
+        val result = pokemonSummaryDAO.getSummary(name)
+        return result.asDomainObject()
     }
     override suspend fun refresh(): ArrayList<Int> {
         val indices: ArrayList<Int> = ArrayList<Int>()

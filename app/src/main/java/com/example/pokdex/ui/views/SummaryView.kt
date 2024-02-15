@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokdex.ui.viewmodels.SummaryViewModel
 import com.example.pokdex.ui.views.components.BusyGif
-import com.example.pokdex.ui.views.components.MyPokemonIndexCard
+import com.example.pokdex.ui.views.components.PokemonIndexCard
 
 @Composable
 fun SummaryView(
@@ -46,7 +46,7 @@ fun SummaryView(
             Divider(thickness = 1.dp)
             LazyColumn(state = lazyListState) {
                 items(items = filteredSummaries) {
-                    MyPokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("summary_${it.index}.png"), navigateToPokemon = navigateToPokemon)
+                    PokemonIndexCard(summary = it, bitmap = summaryViewModel.getImage("summary_${it.index}.png"), navigateToPokemon = navigateToPokemon)
                 }
             }
         }
