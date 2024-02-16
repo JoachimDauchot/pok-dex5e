@@ -22,6 +22,7 @@ import com.example.pokdex.ui.views.components.PokemonIndexCard
 @Composable
 fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navigateToPokemon: (Int) -> Unit) {
     val evolution = pokemonDetailViewModel.pokemon.evolve
+    val levelAt = pokemonDetailViewModel.pokemon.evolve!!.requires
     val summaries = pokemonDetailViewModel.summaries
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -57,7 +58,7 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
             Text(text = "Into:", modifier = Modifier.padding(5.dp))
             val into = summaries["Into"]
             val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${into!!.index}.png")
-            PokemonIndexCard(summary = into, bitmap = bitmap, navigateToPokemon = navigateToPokemon)
+            PokemonDetailEvolutionCard(summary = into, levelAt = evolution!!.level!!, navigateToPokemon = navigateToPokemon, bitmap = bitmap)
         }
     }
 }

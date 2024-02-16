@@ -24,13 +24,15 @@ fun SplashScreenView(
     splashScreenViewModel: SplashScreenViewModel = viewModel(factory = SplashScreenViewModel.Factory),
     navigateToSummaries: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        BusyGif()
-        LinearProgressIndicator(progress = splashScreenViewModel.progress, modifier = Modifier.fillMaxWidth().height(100.dp).padding(20.dp), color = WaterBrush)
-        Text(text = splashScreenViewModel.statusText.collectAsState().value, fontSize = 30.sp)
-        Text(text = splashScreenViewModel.statusProgressText, fontSize = 20.sp)
-        Text(text = splashScreenViewModel.statusSubtext, fontSize = 15.sp)
-        Text(text = splashScreenViewModel.version.collectAsState().value)
+    if (!splashScreenViewModel.isLoading) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            BusyGif()
+            LinearProgressIndicator(progress = splashScreenViewModel.progress.collectAsState().value, modifier = Modifier.fillMaxWidth().height(100.dp).padding(20.dp), color = WaterBrush)
+            Text(text = splashScreenViewModel.statusText, fontSize = 30.sp)
+            Text(text = splashScreenViewModel.statusProgressText, fontSize = 20.sp)
+            Text(text = splashScreenViewModel.statusSubtext, fontSize = 15.sp)
+            Text(text = splashScreenViewModel.version)
+        }
     }
     if (splashScreenViewModel.isFinished) {
         navigateToSummaries()
