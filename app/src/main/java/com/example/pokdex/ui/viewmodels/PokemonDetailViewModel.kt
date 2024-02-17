@@ -32,7 +32,7 @@ class PokemonDetailViewModel(
     private val id: Int = checkNotNull(savedStateHandle["id"])
     var isLoading: Boolean by mutableStateOf(true)
     var pokemon: PokemonDetail by mutableStateOf(PokemonDetail())
-    var summaries: MutableMap<String, PokemonSummary> by mutableStateOf(mutableMapOf())
+    var summaries: MutableMap<String, ArrayList<PokemonSummary>> by mutableStateOf(mutableMapOf())
     var startingMoves: List<Move> by mutableStateOf(listOf())
     var movesPerLevel: Map<Int, List<Move>> by mutableStateOf(mutableMapOf())
 
@@ -65,14 +65,20 @@ class PokemonDetailViewModel(
 
     private suspend fun getSummaries() {
         try {
-            val summaryInto = pokemonSummaryRepository.getSummary(pokemon.evolve!!.into[0])
-            summaries.put("Into", summaryInto)
+            val summaryInto = arrayListOf<PokemonSummary>()
+            for (pokmn in pokemon.evolve!!.into) {
+                summaryInto.add(pokemonSummaryRepository.getSummary(pokmn))
+            }
+            if (summaryInto.isNotEmpty()) summaries["Into"] = summaryInto
         } catch (e: Exception) {
             Log.i("Evolution Into", "This pokemon does not evolve")
         }
         try {
-            val summaryFrom = pokemonSummaryRepository.getSummary(pokemon.evolve!!.from[0])
-            summaries.put("From", summaryFrom)
+            val summaryFrom = arrayListOf<PokemonSummary>()
+            for (pokmn in pokemon.evolve!!.from) {
+                summaryFrom.add(pokemonSummaryRepository.getSummary(pokmn))
+            }
+            if (summaryFrom.isNotEmpty()) summaries["From"] = summaryFrom
         } catch (e: Exception) {
             Log.i("Evolution From", "This pokemon has no prevolve")
         }

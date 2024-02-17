@@ -5,25 +5,25 @@ import com.example.pokdex.data.database.dbObjects.DbMove
 
 data class Move(
 
-    var name: String,
-    var description: String,
-    var duration: String,
+    var name: String = "",
+    var description: String = "",
+    var duration: String = "",
     var power: List<String> = emptyList(),
-    var time: String,
-    var powerPoints: Int,
-    var range: String,
+    var time: String = "",
+    var powerPoints: Int = 0,
+    var range: String = "",
     var scaling: String = "",
-    var type: String,
+    var type: String = "",
     var save: String = "",
-    var technicalMachine: Int,
-    var isAttack: Boolean,
+    var technicalMachine: Int = 0,
+    var isAttack: Boolean = false,
     var damage: Map<Int, Damage> = emptyMap(),
 )
 
 data class Damage(
-    var diceAmount: Int,
-    var diceMax: Int,
-    var addMoveModifier: Boolean,
+    var diceAmount: Int = 0,
+    var diceMax: Int = 0,
+    var addMoveModifier: Boolean = false,
 )
 
 fun Move.asDbObject(): DbMove {
@@ -31,7 +31,7 @@ fun Move.asDbObject(): DbMove {
 }
 
 fun Damage.asDbObject(): DbDamage {
-    return DbDamage(diceAmount, diceAmount, addMoveModifier)
+    return DbDamage(diceAmount, diceMax, addMoveModifier)
 }
 
 fun Map<Int, Damage>.asDbObjects(): Map<Int, DbDamage> {

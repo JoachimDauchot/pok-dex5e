@@ -22,7 +22,6 @@ import com.example.pokdex.ui.views.components.PokemonIndexCard
 @Composable
 fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navigateToPokemon: (Int) -> Unit) {
     val evolution = pokemonDetailViewModel.pokemon.evolve
-    val levelAt = pokemonDetailViewModel.pokemon.evolve!!.requires
     val summaries = pokemonDetailViewModel.summaries
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -50,15 +49,23 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
         if (summaries.containsKey("From")) {
             Text(text = "From:", modifier = Modifier.padding(5.dp))
             val from = summaries["From"]
-            val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${from!!.index}.png")
-            PokemonIndexCard(summary = from, bitmap = bitmap, navigateToPokemon = navigateToPokemon)
+            if (from != null) {
+                for (item in from) {
+                    val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${item.index}.png")
+                    PokemonIndexCard(summary = item, bitmap = bitmap, navigateToPokemon = navigateToPokemon)
+                }
+            }
         }
 
         if (summaries.containsKey("Into")) {
             Text(text = "Into:", modifier = Modifier.padding(5.dp))
             val into = summaries["Into"]
-            val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${into!!.index}.png")
-            PokemonDetailEvolutionCard(summary = into, levelAt = evolution!!.level!!, navigateToPokemon = navigateToPokemon, bitmap = bitmap)
+            if (into != null) {
+                for (item in into) {
+                    val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${item.index}.png")
+                    PokemonDetailEvolutionCard(summary = item, levelAt = evolution!!.level!!, navigateToPokemon = navigateToPokemon, bitmap = bitmap)
+                }
+            }
         }
     }
 }

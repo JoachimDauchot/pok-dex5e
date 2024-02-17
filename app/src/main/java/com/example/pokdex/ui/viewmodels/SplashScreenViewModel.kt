@@ -44,7 +44,7 @@ class SplashScreenViewModel(
                 Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
                 progress = MutableStateFlow(1f)
             } else {
-                getSummaries()
+                // getSummaries()
                 getMoves()
                 getPokemonDetails()
             }
