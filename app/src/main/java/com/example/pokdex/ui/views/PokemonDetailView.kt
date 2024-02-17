@@ -45,7 +45,7 @@ fun PokemonDetailView(
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             PokemonDetailTop(pokemon = pokemon)
             var tabIndex by remember { mutableIntStateOf(0) }
-            val tabs = listOf("Attr", "Abi", "Moves", "Evo")
+            val tabs = listOf("Attr.", "Abil.", "Moves", "Evol.", "Def")
             Column(modifier = Modifier.fillMaxWidth()) {
                 TabRow(selectedTabIndex = tabIndex, divider = {}) {
                     tabs.forEachIndexed { index, title ->
@@ -64,6 +64,7 @@ fun PokemonDetailView(
                     1 -> Box(modifier = Modifier)
                     2 -> PokemonDetailMoves(pokemonDetailViewModel)
                     3 -> PokemonDetailEvolutions(pokemonDetailViewModel, navigateToPokemon)
+                    4 -> Box(modifier = Modifier)
                 }
             }
         }
