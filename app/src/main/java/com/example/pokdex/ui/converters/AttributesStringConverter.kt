@@ -1,9 +1,7 @@
 package com.example.pokdex.ui.converters
 
-
-
 fun AttributesStringConverter(string: String): String {
-    when(string.lowercase()){
+    when (string.lowercase()) {
         "strength" -> return "STR"
         "dexterity" -> return "DEX"
         "constitution" -> return "CON"
