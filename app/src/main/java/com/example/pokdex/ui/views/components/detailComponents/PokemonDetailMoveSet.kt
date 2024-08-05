@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
@@ -147,7 +149,7 @@ fun MoveDialog(
 
     ) {
         Card(modifier = Modifier.fillMaxWidth().border(3.dp, color = convertTypeToColor(move.type), RoundedCornerShape(10.dp))) {
-            Column(Modifier.fillMaxWidth().padding(8.dp)) {
+            Column(Modifier.fillMaxWidth().padding(8.dp).verticalScroll(rememberScrollState())) {
                 Text(move.name, fontSize = 25.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(Modifier.size(8.dp))
                 Box(modifier = Modifier.width(100.dp).padding(PaddingValues(end = 5.dp)).background(color = convertTypeToColor(move.type), shape = RoundedCornerShape(12.dp))) {

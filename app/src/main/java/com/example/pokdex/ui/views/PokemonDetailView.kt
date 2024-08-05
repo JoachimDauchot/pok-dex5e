@@ -12,7 +12,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +59,7 @@ fun PokemonDetailView(
                 }
                 Spacer(modifier = Modifier.size(10.dp))
                 when (tabIndex) {
-                    0 -> PokemonDetailAbilityScore(pokemon.attributes, pokemon.hitPoints, pokemon.armorClass)
+                    0 -> PokemonDetailAbilityScore(pokemon.attributes, pokemon.hitPoints, pokemon.armorClass, pokemon.skills, pokemon.savingThrows)
                     1 -> Box(modifier = Modifier)
                     2 -> PokemonDetailMoves(pokemonDetailViewModel)
                     3 -> PokemonDetailEvolutions(pokemonDetailViewModel, navigateToPokemon)

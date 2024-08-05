@@ -44,7 +44,7 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
                     ),
             )
             Text(text = "Total Stages: ", fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
-            Text(text = evolution.totalStages.toString(), fontSize = 15.sp)
+            Text(text = if (evolution.totalStages == 0) "1" else evolution.totalStages.toString(), fontSize = 15.sp)
         }
         if (summaries.containsKey("From")) {
             Text(text = "From:", modifier = Modifier.padding(5.dp))
