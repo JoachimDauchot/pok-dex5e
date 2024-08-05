@@ -52,7 +52,7 @@ object NavGraph {
                 SplashScreenView(navigateToSummaries = { navController.navigate(PokedexSummaries.name) })
             }
             composable("${PokemonDetail.name}/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) {
-                PokeScaffold(view = { PokemonDetailView(navigateToPokemon = {navController.navigate("${PokemonDetail.name}/$it") }) }, navHostController = navController)
+                PokeScaffold(view = { PokemonDetailView(navigateToPokemon = { navController.navigate("${PokemonDetail.name}/$it") }) }, navHostController = navController)
             }
         }
     }

@@ -28,8 +28,8 @@ fun PokemonDetailGif(index: Int, modifier: Modifier) {
             }
         }
         .build()
-    var url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/$index.gif"
-    var request = rememberAsyncImagePainter(
+    val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/$index.gif"
+    val request = rememberAsyncImagePainter(
         ImageRequest.Builder(LocalContext.current)
             .data(data = url)
             .apply(block = fun ImageRequest.Builder.() {

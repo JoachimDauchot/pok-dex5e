@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.viewmodels
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -13,19 +14,23 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
+import com.example.pokdex.data.repositories.AbilityRepository
 import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PokemonDetailRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
+import com.example.pokdex.model.Ability
 import com.example.pokdex.model.Move
 import com.example.pokdex.model.PokemonDetail
 import com.example.pokdex.model.PokemonSummary
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+@SuppressLint("MutableCollectionMutableState")
 class PokemonDetailViewModel(
     private val pokemonDetailRepository: PokemonDetailRepository,
     private val pokemonSummaryRepository: PokemonSummaryRepository,
     private val moveRepository: MoveRepository,
+    private val abilityRepository: AbilityRepository,
     savedStateHandle: SavedStateHandle,
 
 ) : ViewModel() {
@@ -34,6 +39,8 @@ class PokemonDetailViewModel(
     var pokemon: PokemonDetail by mutableStateOf(PokemonDetail())
     var summaries: MutableMap<String, ArrayList<PokemonSummary>> by mutableStateOf(mutableMapOf())
     var startingMoves: List<Move> by mutableStateOf(listOf())
+    var abilities: List<Ability> by mutableStateOf(listOf())
+    var hiddenAbility: Ability by mutableStateOf(Ability())
     var movesPerLevel: Map<Int, List<Move>> by mutableStateOf(mutableMapOf())
 
     init {
@@ -42,6 +49,7 @@ class PokemonDetailViewModel(
             getPokemon()
             getStartingMoves()
             getMovesPerLevel()
+            getAbilities()
             getSummaries()
             isLoading = false
         }
@@ -83,6 +91,10 @@ class PokemonDetailViewModel(
             Log.i("Evolution From", "This pokemon has no prevolve")
         }
     }
+    private suspend fun getAbilities() {
+        abilities = pokemon.abilities.map { name -> abilityRepository.getAbility(name) }
+        hiddenAbility = if (pokemon.hiddenAbility.isNullOrEmpty()) { Ability() } else abilityRepository.getAbility(pokemon.hiddenAbility!!)
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -91,7 +103,8 @@ class PokemonDetailViewModel(
                 val pokemonDetailRepository = application.container.pokemonDetailRepository
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
                 val moveRepository = application.container.moveRepository
-                PokemonDetailViewModel(pokemonDetailRepository, pokemonSummaryRepository, moveRepository, this.createSavedStateHandle())
+                val abilityRepository = application.container.abilityRepository
+                PokemonDetailViewModel(pokemonDetailRepository, pokemonSummaryRepository, moveRepository, abilityRepository, this.createSavedStateHandle())
             }
         }
     }

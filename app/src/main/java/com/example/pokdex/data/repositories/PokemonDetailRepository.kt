@@ -9,7 +9,6 @@ import com.example.pokdex.data.network.getPokemonDetailsAsFlow
 import com.example.pokdex.model.PokemonDetail
 import com.example.pokdex.model.asDbObject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 interface PokemonDetailRepository {
@@ -27,9 +26,7 @@ class PersistPokemonDetailToDB(
     }
 
     override fun getPokemonDetail(index: Int): Flow<PokemonDetail> {
-        var pokemon = pokemonDetailDAO.getPokemon(index).map { it.asDomainObject() }
-
-        return pokemon
+        return pokemonDetailDAO.getPokemon(index).map { it.asDomainObject() }
     }
 
     override suspend fun refresh() {

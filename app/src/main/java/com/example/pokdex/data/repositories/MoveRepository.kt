@@ -8,7 +8,6 @@ import com.example.pokdex.data.network.MoveService
 import com.example.pokdex.data.network.getMovesAsFlow
 import com.example.pokdex.model.Move
 import com.example.pokdex.model.asDbObject
-import kotlinx.coroutines.flow.collect
 
 interface MoveRepository {
     suspend fun insert(item: Move)
@@ -17,7 +16,7 @@ interface MoveRepository {
     suspend fun retrieveMoves()
 }
 
-public class PersistMoveToDB(
+class PersistMoveToDB(
     private val moveDAO: MoveDAO,
     private val moveService: MoveService,
 ) : MoveRepository {

@@ -4,15 +4,19 @@ import android.content.Context
 import androidx.room.Room
 import com.example.pokdex.data.database.PokedexDatabase
 import com.example.pokdex.data.database.dao.APIVersionDAO
+import com.example.pokdex.data.database.dao.AbilityDAO
 import com.example.pokdex.data.database.dao.MoveDAO
 import com.example.pokdex.data.database.dao.PokemonDetailDAO
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.network.APIVersionService
+import com.example.pokdex.data.network.AbilityService
 import com.example.pokdex.data.network.MoveService
 import com.example.pokdex.data.network.PokemonService
 import com.example.pokdex.data.repositories.APIVersionRepository
+import com.example.pokdex.data.repositories.AbilityRepository
 import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PersistAPIVersionToDb
+import com.example.pokdex.data.repositories.PersistAbilityToDB
 import com.example.pokdex.data.repositories.PersistMoveToDB
 import com.example.pokdex.data.repositories.PersistPokemonDetailToDB
 import com.example.pokdex.data.repositories.PersistPokemonSummaryToDb
@@ -28,6 +32,7 @@ interface AppContainer {
     val apiVersionRepository: APIVersionRepository
     val moveRepository: MoveRepository
     val pokemonDetailRepository: PokemonDetailRepository
+    val abilityRepository: AbilityRepository
 }
 
 class DefaultAppContainer(
@@ -55,6 +60,10 @@ class DefaultAppContainer(
         retrofit.create(MoveService::class.java)
     }
 
+    private val abilityService by lazy {
+        retrofit.create(AbilityService::class.java)
+    }
+
     // create db
     private val pokedexDB: PokedexDatabase by lazy {
         Room.databaseBuilder(applicationContext, PokedexDatabase::class.java, name = "pokedex_database")
@@ -78,6 +87,10 @@ class DefaultAppContainer(
         pokedexDB.pokemonDetailDAO()
     }
 
+    private val abilityDAO: AbilityDAO by lazy {
+        pokedexDB.abilityDAO()
+    }
+
     // inject repositories
     override val pokemonSummaryRepository: PokemonSummaryRepository by lazy {
         PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonService = pokemonService, context = applicationContext)
@@ -93,5 +106,9 @@ class DefaultAppContainer(
 
     override val pokemonDetailRepository: PokemonDetailRepository by lazy {
         PersistPokemonDetailToDB(pokemonDetailDAO = pokemonDetailDAO, pokemonService = pokemonService)
+    }
+
+    override val abilityRepository: AbilityRepository by lazy {
+        PersistAbilityToDB(abilityDAO = abilityDAO, abilityService = abilityService)
     }
 }

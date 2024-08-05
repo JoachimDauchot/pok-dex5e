@@ -6,7 +6,6 @@ import com.example.pokdex.data.database.dbObjects.asDbObject
 import com.example.pokdex.data.database.dbObjects.asDomainObject
 import com.example.pokdex.data.network.APIVersionService
 import com.example.pokdex.model.APIVersion
-import java.net.SocketTimeoutException
 
 interface APIVersionRepository {
     suspend fun insert(item: APIVersion)

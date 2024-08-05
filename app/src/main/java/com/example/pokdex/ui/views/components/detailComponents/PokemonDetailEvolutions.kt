@@ -16,12 +16,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pokdex.model.Evolve
 import com.example.pokdex.ui.viewmodels.PokemonDetailViewModel
 import com.example.pokdex.ui.views.components.PokemonIndexCard
 
 @Composable
 fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navigateToPokemon: (Int) -> Unit) {
-    val evolution = pokemonDetailViewModel.pokemon.evolve
+    val evolution: Evolve? = pokemonDetailViewModel.pokemon.evolve
     val summaries = pokemonDetailViewModel.summaries
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -32,7 +33,7 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
             Arrangement.SpaceEvenly,
         ) {
             Text(text = "Current Stage: ", fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
-            Text(text = evolution!!.currentStage.toString(), fontSize = 15.sp)
+            Text(text = if (evolution?.totalStages == 0) "1" else evolution?.currentStage.toString(), fontSize = 15.sp)
 
             Divider(
                 color = Color.White,
@@ -44,7 +45,7 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
                     ),
             )
             Text(text = "Total Stages: ", fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
-            Text(text = if (evolution.totalStages == 0) "1" else evolution.totalStages.toString(), fontSize = 15.sp)
+            Text(text = if (evolution?.totalStages == 0) "1" else evolution?.totalStages.toString(), fontSize = 15.sp)
         }
         if (summaries.containsKey("From")) {
             Text(text = "From:", modifier = Modifier.padding(5.dp))

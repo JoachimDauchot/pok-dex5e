@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.views.components.detailComponents
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import com.example.pokdex.model.PokemonDetail
 import com.example.pokdex.ui.converters.typeToIconConverter
 import com.example.pokdex.ui.theme.convertTypeToColor
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun PokemonDetailTop(pokemon: PokemonDetail) {
     val colorList by remember { mutableStateOf<ArrayList<Color>>(arrayListOf()) }

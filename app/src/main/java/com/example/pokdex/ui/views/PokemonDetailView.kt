@@ -2,6 +2,7 @@ package com.example.pokdex.ui.views
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pokdex.ui.viewmodels.PokemonDetailViewModel
 import com.example.pokdex.ui.views.components.BusyGif
+import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailAbilities
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailAbilityScore
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailEvolutions
 import com.example.pokdex.ui.views.components.detailComponents.PokemonDetailMoves
@@ -41,10 +43,10 @@ fun PokemonDetailView(
         }
     } else {
         val pokemon = pokemonDetailViewModel.pokemon
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column() {
             PokemonDetailTop(pokemon = pokemon)
             var tabIndex by remember { mutableIntStateOf(0) }
-            val tabs = listOf("Attr.", "Abil.", "Moves", "Evol.", "Def")
+            val tabs = listOf("Attributes", "Abilities", "Moves", "Evolutions")
             Column(modifier = Modifier.fillMaxWidth()) {
                 TabRow(selectedTabIndex = tabIndex, divider = {}) {
                     tabs.forEachIndexed { index, title ->
@@ -58,12 +60,13 @@ fun PokemonDetailView(
                     }
                 }
                 Spacer(modifier = Modifier.size(10.dp))
-                when (tabIndex) {
-                    0 -> PokemonDetailAbilityScore(pokemon.attributes, pokemon.hitPoints, pokemon.armorClass, pokemon.skills, pokemon.savingThrows)
-                    1 -> Box(modifier = Modifier)
-                    2 -> PokemonDetailMoves(pokemonDetailViewModel)
-                    3 -> PokemonDetailEvolutions(pokemonDetailViewModel, navigateToPokemon)
-                    4 -> Box(modifier = Modifier)
+                Row(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    when (tabIndex) {
+                        0 -> PokemonDetailAbilityScore(pokemon.attributes, pokemon.hitPoints, pokemon.armorClass, pokemon.skills, pokemon.savingThrows)
+                        1 -> PokemonDetailAbilities(pokemonDetailViewModel)
+                        2 -> PokemonDetailMoves(pokemonDetailViewModel)
+                        3 -> PokemonDetailEvolutions(pokemonDetailViewModel, navigateToPokemon)
+                    }
                 }
             }
         }

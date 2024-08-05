@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
 import com.example.pokdex.data.repositories.APIVersionRepository
+import com.example.pokdex.data.repositories.AbilityRepository
 import com.example.pokdex.data.repositories.MoveRepository
 import com.example.pokdex.data.repositories.PokemonDetailRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
@@ -23,6 +24,7 @@ class SplashScreenViewModel(
     private val apiVersionRepository: APIVersionRepository,
     private val pokemonSummaryRepository: PokemonSummaryRepository,
     private val moveRepository: MoveRepository,
+    private val abilityRepository: AbilityRepository,
     private val pokemonDetailRepository: PokemonDetailRepository,
 ) : ViewModel() {
 
@@ -46,6 +48,7 @@ class SplashScreenViewModel(
             } else {
                 getSummaries()
                 getMoves()
+                getAbilities()
                 getPokemonDetails()
                 apiVersionRepository.setDownloaded(true)
             }
@@ -82,6 +85,11 @@ class SplashScreenViewModel(
         pokemonDetailRepository.refresh()
     }
 
+    private suspend fun getAbilities() {
+        statusText = "Updating Abilities"
+        abilityRepository.retrieveAbilities()
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -90,7 +98,8 @@ class SplashScreenViewModel(
                 val pokemonSummaryRepository = application.container.pokemonSummaryRepository
                 val moveRepository = application.container.moveRepository
                 val pokemonDetailRepository = application.container.pokemonDetailRepository
-                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository, moveRepository, pokemonDetailRepository)
+                val abilityRepository = application.container.abilityRepository
+                SplashScreenViewModel(apiVersionRepository = apiVersionRepository, pokemonSummaryRepository, moveRepository, abilityRepository, pokemonDetailRepository)
             }
         }
     }

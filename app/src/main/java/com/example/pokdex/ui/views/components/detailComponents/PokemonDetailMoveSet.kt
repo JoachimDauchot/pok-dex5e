@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.pokdex.model.Move
 import com.example.pokdex.ui.converters.typeToIconConverter
 import com.example.pokdex.ui.theme.TransparentBrush
@@ -146,6 +147,9 @@ fun MoveDialog(
         onDismissRequest = {
             onDismissRequest()
         },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+        ),
 
     ) {
         Card(modifier = Modifier.fillMaxWidth().border(3.dp, color = convertTypeToColor(move.type), RoundedCornerShape(10.dp))) {
