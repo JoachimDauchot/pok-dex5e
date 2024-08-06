@@ -7,4 +7,5 @@ enum class PageOverview(@StringRes val title: Int) {
     SplashScreen(title = R.string.SplashScreen),
     PokedexSummaries(title = R.string.PokedexSummaries),
     PokemonDetail(title = R.string.PokemonDetail),
+    UserProfile(title = R.string.UserProfile),
 }

@@ -3,4 +3,5 @@
     <string name="PokedexSummaries">Pokedex Summaries</string>
     <string name="SplashScreen">SplashScreen</string>
     <string name="PokemonDetail">PokemonDetail</string>
+    <string name="UserProfile">Profile</string>
 </resources>

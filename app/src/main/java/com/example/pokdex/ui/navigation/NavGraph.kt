@@ -3,6 +3,9 @@ package com.example.pokdex.ui.navigation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Face
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
@@ -20,9 +23,11 @@ import com.example.pokdex.R
 import com.example.pokdex.ui.navigation.PageOverview.PokedexSummaries
 import com.example.pokdex.ui.navigation.PageOverview.PokemonDetail
 import com.example.pokdex.ui.navigation.PageOverview.SplashScreen
+import com.example.pokdex.ui.navigation.PageOverview.UserProfile
 import com.example.pokdex.ui.views.PokemonDetailView
 import com.example.pokdex.ui.views.SplashScreenView
 import com.example.pokdex.ui.views.SummaryView
+import com.example.pokdex.ui.views.UserProfileView
 import com.example.pokdex.ui.views.components.PokeScaffold
 
 object NavGraph {
@@ -32,9 +37,22 @@ object NavGraph {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             NavigationBarItem(
-                selected = currentRoute == PokedexSummaries.name,
+                selected = PokemonDetail.name.toRegex().containsMatchIn("$currentRoute") || currentRoute == PokedexSummaries.name,
                 onClick = { navController.navigate(PokedexSummaries.name) },
-                icon = { Image(painter = painterResource(id = R.drawable.pok__ball_icon_svg), contentDescription = "Summaries", Modifier.height(50.dp).width(50.dp)) },
+                icon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.pok__ball_icon_svg),
+                        contentDescription = "Summaries",
+                        Modifier
+                            .height(50.dp)
+                            .width(50.dp),
+                    )
+                },
+            )
+            NavigationBarItem(
+                selected = currentRoute == UserProfile.name,
+                onClick = { navController.navigate(UserProfile.name) },
+                icon = { Icon(Icons.Rounded.Face, contentDescription = "Profile", Modifier.height(50.dp).width(50.dp)) },
             )
         }
     }
@@ -53,6 +71,9 @@ object NavGraph {
             }
             composable("${PokemonDetail.name}/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) {
                 PokeScaffold(view = { PokemonDetailView(navigateToPokemon = { navController.navigate("${PokemonDetail.name}/$it") }) }, navHostController = navController)
+            }
+            composable(UserProfile.name) {
+                PokeScaffold(view = { UserProfileView() }, navHostController = navController)
             }
         }
     }
