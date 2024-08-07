@@ -28,20 +28,19 @@ class SplashScreenViewModel(
     private val pokemonDetailRepository: PokemonDetailRepository,
 ) : ViewModel() {
 
-    var version: String by mutableStateOf("")
+    var version: MutableStateFlow<String> = MutableStateFlow("")
     var apiVersion: MutableStateFlow<APIVersion> = MutableStateFlow(APIVersion("", false))
-    var statusText: String by mutableStateOf("")
-    var statusProgressText: String by mutableStateOf("")
-    var statusSubtext: String by mutableStateOf("")
+    var statusText: MutableStateFlow<String> = MutableStateFlow("")
+    var statusProgressText: MutableStateFlow<String> = MutableStateFlow("")
+    var statusSubtext: MutableStateFlow<String> = MutableStateFlow("")
     var progress: MutableStateFlow<Float> = MutableStateFlow(0f)
-    var isLoading: Boolean by mutableStateOf(true)
-    var isFinished: Boolean by mutableStateOf(false)
+    var isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var summariesIndices: List<Int> by mutableStateOf(emptyList())
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+
             getApiVersion()
-            isLoading = false
             if (apiVersionRepository.versionIsUpToDate() && apiVersion.value.wasDownloadedFully) {
                 Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
                 progress = MutableStateFlow(1f)
@@ -52,41 +51,41 @@ class SplashScreenViewModel(
                 getPokemonDetails()
                 apiVersionRepository.setDownloaded(true)
             }
-            isFinished = true
+            isLoading.value = false
         }
     }
 
     private suspend fun getApiVersion() {
         apiVersion = MutableStateFlow(apiVersionRepository.getVersion())
-        version = "Dataset version: ${apiVersion.value.version}"
-        statusText = "Checking for updates"
+        version.value = "Dataset version: ${apiVersion.value.version}"
+        statusText.value = "Checking for updates"
     }
 
     private suspend fun getSummaries() {
-        statusText = "Updating summaries"
-        statusSubtext = "This may take a while on first startup"
+        statusText.value = "Updating summaries"
+        statusSubtext.value = "This may take a while on first startup"
         // persist summaries and request the indeces for image retrieval
         summariesIndices = pokemonSummaryRepository.refresh()
         val count: Int = summariesIndices.count()
         for (index in summariesIndices) {
-            statusProgressText = "($index / $count)"
+            statusProgressText.value = "($index / $count)"
             pokemonSummaryRepository.saveImageToInternalStorage("summary_$index.png", "$index.png")
             progress = MutableStateFlow(index.toFloat() / count.toFloat())
         }
     }
 
     private suspend fun getMoves() {
-        statusText = "Updating moves set"
+        statusText.value = "Updating moves set"
         moveRepository.retrieveMoves()
     }
 
     private suspend fun getPokemonDetails() {
-        statusText = "Updating Pokemon details"
+        statusText.value = "Updating Pokemon details"
         pokemonDetailRepository.refresh()
     }
 
     private suspend fun getAbilities() {
-        statusText = "Updating Abilities"
+        statusText.value = "Updating Abilities"
         abilityRepository.retrieveAbilities()
     }
 
