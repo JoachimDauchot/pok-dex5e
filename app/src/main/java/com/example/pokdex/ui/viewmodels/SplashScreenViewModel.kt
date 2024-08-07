@@ -26,6 +26,7 @@ class SplashScreenViewModel(
     private val moveRepository: MoveRepository,
     private val abilityRepository: AbilityRepository,
     private val pokemonDetailRepository: PokemonDetailRepository,
+
 ) : ViewModel() {
 
     var version: MutableStateFlow<String> = MutableStateFlow("")
@@ -39,7 +40,6 @@ class SplashScreenViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-
             getApiVersion()
             if (apiVersionRepository.versionIsUpToDate() && apiVersion.value.wasDownloadedFully) {
                 Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
@@ -51,6 +51,7 @@ class SplashScreenViewModel(
                 getPokemonDetails()
                 apiVersionRepository.setDownloaded(true)
             }
+            getApiVersion()
             isLoading.value = false
         }
     }
@@ -66,12 +67,12 @@ class SplashScreenViewModel(
         statusSubtext.value = "This may take a while on first startup"
         // persist summaries and request the indeces for image retrieval
         summariesIndices = pokemonSummaryRepository.refresh()
-        val count: Int = summariesIndices.count()
-        for (index in summariesIndices) {
-            statusProgressText.value = "($index / $count)"
-            pokemonSummaryRepository.saveImageToInternalStorage("summary_$index.png", "$index.png")
-            progress = MutableStateFlow(index.toFloat() / count.toFloat())
-        }
+//        val count: Int = summariesIndices.count()
+//        for (index in summariesIndices) {
+//            statusProgressText.value = "($index / $count)"
+//            pokemonSummaryRepository.saveImageToInternalStorage("summary_$index.png", "$index.png")
+//            progress = MutableStateFlow(index.toFloat() / count.toFloat())
+//        }
     }
 
     private suspend fun getMoves() {

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,6 +36,12 @@ fun SplashScreenView(
         }
     }
     if (!splashScreenViewModel.isLoading.collectAsState().value) {
-        navigateToSummaries()
+        if (splashScreenViewModel.apiVersion.collectAsState().value.wasDownloadedFully) {
+            navigateToSummaries()
+        } else {
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Check your internet connection or try again later. The server may be down. An initial connection to the server is required to load the initial data set", textAlign = TextAlign.Justify)
+            }
+        }
     }
 }

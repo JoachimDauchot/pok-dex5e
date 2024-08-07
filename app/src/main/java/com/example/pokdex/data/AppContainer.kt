@@ -8,6 +8,7 @@ import com.example.pokdex.data.database.dao.AbilityDAO
 import com.example.pokdex.data.database.dao.MoveDAO
 import com.example.pokdex.data.database.dao.PokemonDetailDAO
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
+import com.example.pokdex.data.database.dao.UserDAO
 import com.example.pokdex.data.network.APIVersionService
 import com.example.pokdex.data.network.AbilityService
 import com.example.pokdex.data.network.MoveService
@@ -20,8 +21,10 @@ import com.example.pokdex.data.repositories.PersistAbilityToDB
 import com.example.pokdex.data.repositories.PersistMoveToDB
 import com.example.pokdex.data.repositories.PersistPokemonDetailToDB
 import com.example.pokdex.data.repositories.PersistPokemonSummaryToDb
+import com.example.pokdex.data.repositories.PersistUserOrPokemonToDB
 import com.example.pokdex.data.repositories.PokemonDetailRepository
 import com.example.pokdex.data.repositories.PokemonSummaryRepository
+import com.example.pokdex.data.repositories.UserAndPkmnRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -33,6 +36,7 @@ interface AppContainer {
     val moveRepository: MoveRepository
     val pokemonDetailRepository: PokemonDetailRepository
     val abilityRepository: AbilityRepository
+    val userAndPkmnRepository: UserAndPkmnRepository
 }
 
 class DefaultAppContainer(
@@ -40,12 +44,16 @@ class DefaultAppContainer(
 ) : AppContainer {
 
     private val baseUrl = "http://10.0.2.2:5262"
-    private var retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(
-            Json.asConverterFactory("application/json".toMediaType()),
-        )
-        .baseUrl(baseUrl)
-        .build()
+
+
+
+        private var retrofit: Retrofit = Retrofit.Builder()
+            .addConverterFactory(
+                Json.asConverterFactory("application/json".toMediaType()),
+            )
+            .baseUrl(baseUrl)
+            .build()
+
 
     // inject services
     private val pokemonService by lazy {
@@ -66,8 +74,8 @@ class DefaultAppContainer(
 
     // create db
     private val pokedexDB: PokedexDatabase by lazy {
-        Room.databaseBuilder(applicationContext, PokedexDatabase::class.java, name = "pokedex_database")
-            .build()
+
+        Room.databaseBuilder(applicationContext, PokedexDatabase::class.java, name = "pokedex_database").build()
     }
 
     // inject DAO
@@ -91,6 +99,10 @@ class DefaultAppContainer(
         pokedexDB.abilityDAO()
     }
 
+    private val userDAO: UserDAO by lazy {
+        pokedexDB.UserDAO()
+    }
+
     // inject repositories
     override val pokemonSummaryRepository: PokemonSummaryRepository by lazy {
         PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonService = pokemonService, context = applicationContext)
@@ -110,5 +122,9 @@ class DefaultAppContainer(
 
     override val abilityRepository: AbilityRepository by lazy {
         PersistAbilityToDB(abilityDAO = abilityDAO, abilityService = abilityService)
+    }
+
+    override val userAndPkmnRepository: UserAndPkmnRepository by lazy {
+        PersistUserOrPokemonToDB(userDAO = userDAO)
     }
 }

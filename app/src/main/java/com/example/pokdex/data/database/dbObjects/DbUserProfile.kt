@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "UserProfile")
 data class DbUserProfile(
     @PrimaryKey(autoGenerate = true)
-    var userId: Int,
-    var name: String,
-    var level: Int
+    var userId: Int? = null,
+    var name: String?,
+    var level: Int?,
 )

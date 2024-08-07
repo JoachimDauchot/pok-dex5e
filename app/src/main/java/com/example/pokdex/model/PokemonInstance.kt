@@ -1,0 +1,26 @@
+package com.example.pokdex.model
+
+data class PokemonInstance(
+    var index: Int,
+    var userHolderId: Int,
+    var name: String,
+    var size: String,
+    var speciesRating: Float,
+    var level: Int,
+    var types: List<String>,
+    var abilities: List<String>,
+    var hiddenAbility: String?,
+    var walkingSpeed: Int,
+    var flyingSpeed: Int,
+    var swimmingSpeed: Int,
+    var climbingSpeed: Int,
+    var burrowingSpeed: Int,
+    var armorClass: Int,
+    var currentHitPoints: Int,
+    var maxHitPoints: Int,
+    var hitDice: Int,
+    var attributes: Attributes,
+    // var moves: List<Move>,
+    var savingThrows: List<String>,
+    var skills: List<String>,
+)
