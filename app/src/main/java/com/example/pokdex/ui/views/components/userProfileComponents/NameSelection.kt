@@ -18,6 +18,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.pokdex.ui.viewmodels.UserProfileViewModel
 import kotlinx.coroutines.launch
@@ -46,6 +48,10 @@ fun NameSelection(userProfileViewModel: UserProfileViewModel) {
             }
         }, modifier = Modifier.fillMaxWidth()) {
             Text(text = "OK")
+        }
+        Spacer(modifier = Modifier.height(15.dp))
+        if (!isValidName) {
+            Text(color = Color.Red, text = " Name cannot be blank or be more than 10 characters long", textAlign = TextAlign.Center)
         }
     }
 }

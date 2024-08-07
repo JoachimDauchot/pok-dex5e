@@ -1,6 +1,7 @@
 package com.example.pokdex.data
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.example.pokdex.data.database.PokedexDatabase
 import com.example.pokdex.data.database.dao.APIVersionDAO
@@ -45,30 +46,31 @@ class DefaultAppContainer(
 
     private val baseUrl = "http://10.0.2.2:5262"
 
-
-
-        private var retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(
-                Json.asConverterFactory("application/json".toMediaType()),
-            )
-            .baseUrl(baseUrl)
-            .build()
-
+    private var retrofit: Retrofit = Retrofit.Builder()
+        .addConverterFactory(
+            Json.asConverterFactory("application/json".toMediaType()),
+        )
+        .baseUrl(baseUrl)
+        .build()
 
     // inject services
     private val pokemonService by lazy {
+        Log.i("Interweb", "creating pokemonservice")
         retrofit.create(PokemonService::class.java)
     }
 
     private val apiVersionService by lazy {
+        Log.i("Interweb", "creating apiVersionService")
         retrofit.create(APIVersionService::class.java)
     }
 
     private val moveService by lazy {
+        Log.i("Interweb", "creating moveService")
         retrofit.create(MoveService::class.java)
     }
 
     private val abilityService by lazy {
+        Log.i("Interweb", "creating abilityService")
         retrofit.create(AbilityService::class.java)
     }
 

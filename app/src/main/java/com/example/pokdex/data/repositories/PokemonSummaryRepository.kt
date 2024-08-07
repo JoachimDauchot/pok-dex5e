@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.core.graphics.scale
 import com.example.pokdex.R
 import com.example.pokdex.data.ImageStorageManager
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
@@ -59,7 +60,7 @@ class PersistPokemonSummaryToDb(
                     println(summary)
                 }
             }
-        } catch (e: SocketTimeoutException) {
+        } catch (e: Exception) {
             Log.i("API", "API is down")
         }
         return indices

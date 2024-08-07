@@ -40,14 +40,19 @@ class SplashScreenViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.i("startup", "initiating splashscreenViewModel")
             getApiVersion()
             if (apiVersionRepository.versionIsUpToDate() && apiVersion.value.wasDownloadedFully) {
                 Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
                 progress = MutableStateFlow(1f)
             } else {
+                Log.i("startup", "Getting summaries")
                 getSummaries()
+                Log.i("startup", "Getting moves")
                 getMoves()
+                Log.i("startup", "Getting abilities")
                 getAbilities()
+                Log.i("startup", "Getting Details")
                 getPokemonDetails()
                 apiVersionRepository.setDownloaded(true)
             }
