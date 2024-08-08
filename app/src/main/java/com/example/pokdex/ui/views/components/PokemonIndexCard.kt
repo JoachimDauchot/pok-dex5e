@@ -1,6 +1,7 @@
 package com.example.pokdex.ui.views.components
 
 import android.graphics.Bitmap
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,24 +21,34 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.example.pokdex.R
 import com.example.pokdex.model.PokemonSummary
 import com.example.pokdex.ui.converters.typeToIconConverter
 import com.example.pokdex.ui.theme.TransparentBrush
 import com.example.pokdex.ui.theme.convertTypeToColor
+import com.example.pokdex.ui.viewmodels.SummaryViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
-fun PokemonIndexCard(summary: PokemonSummary, bitmap: Bitmap, navigateToPokemon: (Int) -> Unit) {
+fun PokemonIndexCard(summary: PokemonSummary, summaryViewModel: SummaryViewModel, navigateToPokemon: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,9 +57,13 @@ fun PokemonIndexCard(summary: PokemonSummary, bitmap: Bitmap, navigateToPokemon:
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
 
     ) {
+        var image: Bitmap? by remember { mutableStateOf(null) }
+        LaunchedEffect(summary) {
+            withContext(Dispatchers.IO) { image = summaryViewModel.getImage(summary.index.toString()) }
+        }
         Row(modifier = Modifier.padding(5.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {
-                Image(bitmap.asImageBitmap(), "pokemonPixelArt", modifier = Modifier.scale(8f, 8f).align(Alignment.Center), filterQuality = FilterQuality.None)
+                AsyncImage(image, "pokemonPixelArt", modifier = Modifier.scale(8f, 8f).align(Alignment.Center), filterQuality = FilterQuality.None)
             }
             Column(modifier = Modifier.width(200.dp).height(100.dp)) {
                 Text(text = summary.name, fontSize = 20.sp, color = Color.White, modifier = Modifier.padding(2.dp).align(Alignment.CenterHorizontally).fillMaxWidth())

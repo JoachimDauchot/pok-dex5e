@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.views.components.detailComponents
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,12 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pokdex.model.Evolve
 import com.example.pokdex.ui.viewmodels.PokemonDetailViewModel
-import com.example.pokdex.ui.views.components.PokemonIndexCard
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navigateToPokemon: (Int) -> Unit) {
     val evolution: Evolve? = pokemonDetailViewModel.pokemon.evolve
     val summaries = pokemonDetailViewModel.summaries
+    var coroutineScope = rememberCoroutineScope()
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -52,8 +61,11 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
             val from = summaries["From"]
             if (from != null) {
                 for (item in from) {
-                    val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${item.index}.png")
-                    PokemonIndexCard(summary = item, bitmap = bitmap, navigateToPokemon = navigateToPokemon)
+                    var image: Bitmap? by remember { mutableStateOf(null) }
+                    LaunchedEffect(item) {
+                        withContext(Dispatchers.IO) { image = pokemonDetailViewModel.getSummaryImage(item.index.toString()) }
+                    }
+                    PokemonDetailEvolutionCard(summary = item, levelAt = 0, speciesRating = item.speciesRating, navigateToPokemon = navigateToPokemon, bitmap = image)
                 }
             }
         }
@@ -63,8 +75,11 @@ fun PokemonDetailEvolutions(pokemonDetailViewModel: PokemonDetailViewModel, navi
             val into = summaries["Into"]
             if (into != null) {
                 for (item in into) {
-                    val bitmap = pokemonDetailViewModel.getSummaryImage("summary_${item.index}.png")
-                    PokemonDetailEvolutionCard(summary = item, levelAt = evolution!!.level!!, navigateToPokemon = navigateToPokemon, bitmap = bitmap)
+                    var image: Bitmap? by remember { mutableStateOf(null) }
+                    LaunchedEffect(item) {
+                        withContext(Dispatchers.IO) { image = pokemonDetailViewModel.getSummaryImage(item.index.toString()) }
+                    }
+                    PokemonDetailEvolutionCard(summary = item, levelAt = evolution!!.level!!, speciesRating = item.speciesRating, navigateToPokemon = navigateToPokemon, bitmap = image)
                 }
             }
         }

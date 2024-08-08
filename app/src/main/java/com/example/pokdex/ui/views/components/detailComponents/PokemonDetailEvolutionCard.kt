@@ -1,7 +1,6 @@
 package com.example.pokdex.ui.views.components.detailComponents
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,14 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.pokdex.model.PokemonSummary
 
 @Composable
-fun PokemonDetailEvolutionCard(summary: PokemonSummary, levelAt: Int, navigateToPokemon: (Int) -> Unit, bitmap: Bitmap) {
+fun PokemonDetailEvolutionCard(summary: PokemonSummary, levelAt: Int, speciesRating: Float, navigateToPokemon: (Int) -> Unit, bitmap: Bitmap?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,8 +41,8 @@ fun PokemonDetailEvolutionCard(summary: PokemonSummary, levelAt: Int, navigateTo
     ) {
         Row(modifier = Modifier.padding(5.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {
-                Image(
-                    bitmap.asImageBitmap(),
+                AsyncImage(
+                    bitmap,
                     "pokemonPixelArt",
                     modifier = Modifier.scale(8f, 8f).align(
                         Alignment.Center,
@@ -60,12 +60,21 @@ fun PokemonDetailEvolutionCard(summary: PokemonSummary, levelAt: Int, navigateTo
                     ).fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.size(15.dp))
-                Text(
-                    text = "min. level to evolve: $levelAt",
-                    modifier = Modifier.padding(2.dp).align(
-                        Alignment.CenterHorizontally,
-                    ).fillMaxWidth(),
-                )
+                if (levelAt > 0) {
+                    Text(
+                        text = "min. level to evolve: $levelAt",
+                        modifier = Modifier.padding(2.dp).align(
+                            Alignment.CenterHorizontally,
+                        ).fillMaxWidth(),
+                    )
+                } else {
+                    Text(
+                        text = "SR: $speciesRating",
+                        modifier = Modifier.padding(2.dp).align(
+                            Alignment.CenterHorizontally,
+                        ).fillMaxWidth(),
+                    )
+                }
             }
 
             Box(modifier = Modifier.height(100.dp).padding(5.dp)) {

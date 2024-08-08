@@ -36,35 +36,50 @@ class SplashScreenViewModel(
     var statusSubtext: MutableStateFlow<String> = MutableStateFlow("")
     var progress: MutableStateFlow<Float> = MutableStateFlow(0f)
     var isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    var isUpToDate: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var hasInternetConnection: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private var summariesIndices: List<Int> by mutableStateOf(emptyList())
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("startup", "initiating splashscreenViewModel")
             getApiVersion()
-            if (apiVersionRepository.versionIsUpToDate() && apiVersion.value.wasDownloadedFully) {
-                Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
-                progress = MutableStateFlow(1f)
-            } else {
-                Log.i("startup", "Getting summaries")
-                getSummaries()
-                Log.i("startup", "Getting moves")
-                getMoves()
-                Log.i("startup", "Getting abilities")
-                getAbilities()
-                Log.i("startup", "Getting Details")
-                getPokemonDetails()
-                apiVersionRepository.setDownloaded(true)
+            try {
+                isUpToDate.value = apiVersionRepository.versionIsUpToDate()
+            } catch (e: Exception) {
+                hasInternetConnection.value = false
             }
-            getApiVersion()
+            if (hasInternetConnection.value) {
+                loadData()
+            }
+            progress = MutableStateFlow(1f)
             isLoading.value = false
         }
+    }
+
+    private suspend fun loadData() {
+        if (isUpToDate.value && apiVersion.value.wasDownloadedFully) {
+            Log.i("versionCheck", "Version is up to date and was succesfully downloaded")
+            progress = MutableStateFlow(1f)
+        } else {
+            Log.i("startup", "Getting summaries")
+            getSummaries()
+            Log.i("startup", "Getting moves")
+            getMoves()
+            Log.i("startup", "Getting abilities")
+            getAbilities()
+            Log.i("startup", "Getting Details")
+            getPokemonDetails()
+            apiVersionRepository.setDownloaded(true)
+        }
+        getApiVersion()
     }
 
     private suspend fun getApiVersion() {
         apiVersion = MutableStateFlow(apiVersionRepository.getVersion())
         version.value = "Dataset version: ${apiVersion.value.version}"
         statusText.value = "Checking for updates"
+        hasInternetConnection.value = true
     }
 
     private suspend fun getSummaries() {

@@ -59,8 +59,8 @@ class PokemonDetailViewModel(
         pokemon = pokemonDetailRepository.getPokemonDetail(id).first()
     }
 
-    fun getSummaryImage(filename: String): Bitmap {
-        return pokemonSummaryRepository.retrieveImage(filename)
+    suspend fun getSummaryImage(filename: String): Bitmap {
+        return pokemonSummaryRepository.loadSummaryImage(filename)
     }
 
     private suspend fun getStartingMoves() {

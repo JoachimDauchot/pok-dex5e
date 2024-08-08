@@ -1,6 +1,5 @@
 package com.example.pokdex.data.repositories
 
-import android.util.Log
 import com.example.pokdex.data.database.dao.APIVersionDAO
 import com.example.pokdex.data.database.dbObjects.asDbObject
 import com.example.pokdex.data.database.dbObjects.asDomainObject
@@ -40,18 +39,15 @@ class PersistAPIVersionToDb(
 
     override suspend fun versionIsUpToDate(): Boolean {
         val currentVersion: APIVersion = getVersion()
+        val newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
+        var result = false
 
-        return try {
-            val newVersion = APIVersion(apiVersionService.getAPIVersion(), wasDownloadedFully = false)
-            if (currentVersion.version == newVersion.version) {
-                true
-            } else {
-                insert(newVersion)
-                false
-            }
-        } catch (e: Exception) {
-            Log.i("API", "API is down")
-            true
+        if (currentVersion.version == newVersion.version) {
+            result = true
+        } else {
+            insert(newVersion)
+            result = false
         }
+        return result
     }
 }

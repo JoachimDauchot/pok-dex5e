@@ -23,7 +23,6 @@ class SummaryViewModel(
     lateinit var summaries: StateFlow<List<PokemonSummary>>
 
     init {
-
         getSummaries()
     }
 
@@ -37,8 +36,8 @@ class SummaryViewModel(
                 initialValue = listOf(PokemonSummary()),
             )
     }
-    fun getImage(filename: String): Bitmap {
-        return pokemonSummaryRepository.retrieveImage(filename)
+    suspend fun getImage(filename: String): Bitmap {
+        return pokemonSummaryRepository.loadSummaryImage(filename)
     }
 
     companion object {
