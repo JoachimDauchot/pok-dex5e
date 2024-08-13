@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.pokdex.data.database.dbObjects.DbPokemonInstance
 import com.example.pokdex.data.database.dbObjects.DbUserProfile
 import com.example.pokdex.data.database.relations.DbUserWithPkmn
 
@@ -17,4 +18,6 @@ interface UserDAO {
     @Transaction
     @Query("SELECT * from UserProfile LIMIT 1")
     suspend fun getUserProfile(): DbUserWithPkmn
+
+
 }

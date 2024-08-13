@@ -86,6 +86,8 @@ fun DbPokemonDetail.asDomainObject(): PokemonDetail {
     )
 }
 
+
+
 fun DbAttributes.asDomainObject(): Attributes {
     return Attributes(
         strength = strength,

@@ -1,7 +1,9 @@
 package com.example.pokdex.model
 
+import com.example.pokdex.data.database.dbObjects.DbPokemonInstance
+
 data class PokemonInstance(
-    var index: Int,
+    var index: Int?,
     var userHolderId: Int,
     var name: String,
     var size: String,
@@ -24,3 +26,29 @@ data class PokemonInstance(
     var savingThrows: List<String>,
     var skills: List<String>,
 )
+
+fun PokemonInstance.asDbObject(): DbPokemonInstance {
+    return DbPokemonInstance(
+        index = index,
+        userHolderId = userHolderId,
+        name = name,
+        size = size,
+        speciesRating = speciesRating,
+        level = level,
+        types = types,
+        abilities = abilities,
+        hiddenAbility = hiddenAbility,
+        walkingSpeed = walkingSpeed,
+        flyingSpeed = flyingSpeed,
+        swimmingSpeed = swimmingSpeed,
+        climbingSpeed = climbingSpeed,
+        burrowingSpeed = burrowingSpeed,
+        armorClass = armorClass,
+        currentHitPoints = currentHitPoints,
+        maxHitPoints = maxHitPoints,
+        hitDice = hitDice,
+        attributes = attributes.asDbObject(),
+        savingThrows = savingThrows,
+        skills = skills,
+    )
+}

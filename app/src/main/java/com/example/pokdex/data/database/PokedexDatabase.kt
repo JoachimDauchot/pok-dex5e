@@ -8,6 +8,7 @@ import com.example.pokdex.data.database.dao.APIVersionDAO
 import com.example.pokdex.data.database.dao.AbilityDAO
 import com.example.pokdex.data.database.dao.MoveDAO
 import com.example.pokdex.data.database.dao.PokemonDetailDAO
+import com.example.pokdex.data.database.dao.PokemonInstanceDAO
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.database.dao.UserDAO
 import com.example.pokdex.data.database.dbObjects.DbAPIVersion
@@ -41,6 +42,7 @@ abstract class PokedexDatabase : RoomDatabase() {
     abstract fun pokemonDetailDAO(): PokemonDetailDAO
     abstract fun abilityDAO(): AbilityDAO
     abstract fun UserDAO(): UserDAO
+    abstract fun pokemonInstanceDAO(): PokemonInstanceDAO
 }
 
 inline fun <reified T> Gson.fromJson(json: String): T =

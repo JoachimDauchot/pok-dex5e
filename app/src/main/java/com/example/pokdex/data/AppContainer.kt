@@ -8,6 +8,7 @@ import com.example.pokdex.data.database.dao.APIVersionDAO
 import com.example.pokdex.data.database.dao.AbilityDAO
 import com.example.pokdex.data.database.dao.MoveDAO
 import com.example.pokdex.data.database.dao.PokemonDetailDAO
+import com.example.pokdex.data.database.dao.PokemonInstanceDAO
 import com.example.pokdex.data.database.dao.PokemonSummaryDAO
 import com.example.pokdex.data.database.dao.UserDAO
 import com.example.pokdex.data.network.APIVersionService
@@ -105,6 +106,10 @@ class DefaultAppContainer(
         pokedexDB.UserDAO()
     }
 
+    private val pokemonInstanceDAO: PokemonInstanceDAO by lazy {
+        pokedexDB.pokemonInstanceDAO()
+    }
+
     // inject repositories
     override val pokemonSummaryRepository: PokemonSummaryRepository by lazy {
         PersistPokemonSummaryToDb(pokemonSummaryDAO = pokemonSummaryDAO, pokemonService = pokemonService, context = applicationContext)
@@ -127,6 +132,6 @@ class DefaultAppContainer(
     }
 
     override val userAndPkmnRepository: UserAndPkmnRepository by lazy {
-        PersistUserOrPokemonToDB(userDAO = userDAO)
+        PersistUserOrPokemonToDB(userDAO = userDAO, pokemonInstanceDAO = pokemonInstanceDAO)
     }
 }

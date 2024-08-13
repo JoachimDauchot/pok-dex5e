@@ -81,6 +81,33 @@ fun PokemonDetail.asDbObject(): DbPokemonDetail {
     )
 }
 
+fun PokemonDetail.asInstance(): PokemonInstance {
+    return PokemonInstance(
+        index = null,
+        name = name,
+        userHolderId = 0,
+        speciesRating = speciesRating,
+        level = 1,
+        types = types,
+        size = size,
+        abilities = abilities,
+        hiddenAbility = hiddenAbility,
+        walkingSpeed = walkingSpeed,
+        flyingSpeed = flyingSpeed,
+        swimmingSpeed = swimmingSpeed,
+        climbingSpeed = climbingSpeed,
+        burrowingSpeed = burrowingSpeed,
+        armorClass = armorClass,
+        currentHitPoints = hitPoints,
+        maxHitPoints = hitPoints,
+        hitDice = hitDice,
+        attributes = attributes,
+        savingThrows = savingThrows,
+        skills = skills,
+
+    )
+}
+
 fun Attributes.asDbObject(): DbAttributes {
     return DbAttributes(
         strength = strength,

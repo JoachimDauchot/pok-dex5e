@@ -59,7 +59,7 @@ fun PokemonIndexCard(summary: PokemonSummary, summaryViewModel: SummaryViewModel
     ) {
         var image: Bitmap? by remember { mutableStateOf(null) }
         LaunchedEffect(summary) {
-            withContext(Dispatchers.IO) { image = summaryViewModel.getImage(summary.index.toString()) }
+            withContext(Dispatchers.IO) { image = summaryViewModel.getImage(if (summary.index == 0) "1" else summary.index.toString()) }
         }
         Row(modifier = Modifier.padding(5.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {

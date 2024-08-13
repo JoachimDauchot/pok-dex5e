@@ -14,13 +14,17 @@ class ImageStorageManager {
                 bitmapImage.compress(Bitmap.CompressFormat.PNG, 25, fos)
             }
             Log.i("saver", context.filesDir.absolutePath)
+
             return context.filesDir.absolutePath
         }
 
         fun getImageFromInternalStorage(context: Context, imageFileName: String): Bitmap? {
             val directory = context.filesDir
             val file = File(directory, imageFileName)
-            return BitmapFactory.decodeStream(FileInputStream(file))
+            val inputStream = FileInputStream(file)
+            val image =  BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+            return image
         }
 
 //        fun deleteImageFromInternalStorage(context: Context, imageFileName: String): Boolean {

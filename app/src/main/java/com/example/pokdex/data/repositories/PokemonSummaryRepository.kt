@@ -69,6 +69,7 @@ class PersistPokemonSummaryToDb(
             val url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$index.png")
             val bitmap: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
             ImageStorageManager.saveToInternalStorage(context = context, bitmap, "summary_$index.png")
+
             return bitmap
         } catch (e: Exception) {
             Log.i("image saving", "Failed to retrieve and save image $index at https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$index.png")
@@ -83,7 +84,7 @@ class PersistPokemonSummaryToDb(
             val image = ImageStorageManager.getImageFromInternalStorage(context, fileName)
             if (image != null) return image
         } catch (e: Exception) {
-            Log.i("imageRetrieval", "Image $fileName does not exist and cannot be fetched")
+            Log.i("imageRetrieval", "Image $fileName does not exist")
             Log.i("error loadSummary", e.toString())
         }
         return fetchSummaryImage(index)

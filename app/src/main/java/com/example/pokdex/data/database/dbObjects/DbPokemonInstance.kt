@@ -5,11 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.pokdex.model.PokemonInstance
 
-
 @Entity
 data class DbPokemonInstance(
     @PrimaryKey(autoGenerate = true)
-    var index: Int,
+    var index: Int?,
     var userHolderId: Int,
     var name: String,
     var size: String,
@@ -34,7 +33,8 @@ data class DbPokemonInstance(
 )
 
 fun DbPokemonInstance.asDomainObject(): PokemonInstance {
-    return PokemonInstance(index = index,
+    return PokemonInstance(
+        index = index,
         userHolderId = userHolderId,
         name = name,
         size = size,
@@ -54,5 +54,6 @@ fun DbPokemonInstance.asDomainObject(): PokemonInstance {
         hitDice = hitDice,
         attributes = attributes.asDomainObject(),
         savingThrows = savingThrows,
-        skills = skills)
+        skills = skills,
+    )
 }
