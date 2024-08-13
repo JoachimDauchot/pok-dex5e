@@ -9,6 +9,7 @@ import com.example.pokdex.model.PokemonInstance
 data class DbPokemonInstance(
     @PrimaryKey(autoGenerate = true)
     var index: Int?,
+    var gameIndex: Int,
     var userHolderId: Int,
     var name: String,
     var size: String,
@@ -35,6 +36,7 @@ data class DbPokemonInstance(
 fun DbPokemonInstance.asDomainObject(): PokemonInstance {
     return PokemonInstance(
         index = index,
+        gameIndex = gameIndex,
         userHolderId = userHolderId,
         name = name,
         size = size,

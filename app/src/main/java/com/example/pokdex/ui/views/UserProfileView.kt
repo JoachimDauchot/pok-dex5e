@@ -1,6 +1,5 @@
 package com.example.pokdex.ui.views
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,6 +18,5 @@ fun UserProfileView(
         NameSelection(userProfileViewModel = userProfileViewModel)
     } else {
         ProfileView(userProfileViewModel = userProfileViewModel)
-        Text(text = if (userProfileViewModel.user.collectAsState().value.pokemonParty?.get(0)?.name == null) "nope" else userProfileViewModel.user.collectAsState().value.pokemonParty?.get(0)?.name!!)
     }
 }

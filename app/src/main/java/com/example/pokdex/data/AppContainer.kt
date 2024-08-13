@@ -132,6 +132,6 @@ class DefaultAppContainer(
     }
 
     override val userAndPkmnRepository: UserAndPkmnRepository by lazy {
-        PersistUserOrPokemonToDB(userDAO = userDAO, pokemonInstanceDAO = pokemonInstanceDAO)
+        PersistUserOrPokemonToDB(userDAO = userDAO, pokemonInstanceDAO = pokemonInstanceDAO, context = applicationContext)
     }
 }

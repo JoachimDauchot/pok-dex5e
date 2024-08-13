@@ -64,12 +64,16 @@ class SplashScreenViewModel(
         } else {
             Log.i("startup", "Getting summaries")
             getSummaries()
+            progress.value += 0.25f
             Log.i("startup", "Getting moves")
             getMoves()
+            progress.value += 0.25f
             Log.i("startup", "Getting abilities")
             getAbilities()
+            progress.value += 0.25f
             Log.i("startup", "Getting Details")
             getPokemonDetails()
+            progress.value += 0.25f
             apiVersionRepository.setDownloaded(true)
         }
         getApiVersion()

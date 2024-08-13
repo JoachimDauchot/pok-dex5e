@@ -84,6 +84,7 @@ fun PokemonDetail.asDbObject(): DbPokemonDetail {
 fun PokemonDetail.asInstance(): PokemonInstance {
     return PokemonInstance(
         index = null,
+        gameIndex = index,
         name = name,
         userHolderId = 0,
         speciesRating = speciesRating,

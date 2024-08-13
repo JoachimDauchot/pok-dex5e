@@ -4,6 +4,7 @@ import com.example.pokdex.data.database.dbObjects.DbPokemonInstance
 
 data class PokemonInstance(
     var index: Int?,
+    var gameIndex: Int,
     var userHolderId: Int,
     var name: String,
     var size: String,
@@ -30,6 +31,7 @@ data class PokemonInstance(
 fun PokemonInstance.asDbObject(): DbPokemonInstance {
     return DbPokemonInstance(
         index = index,
+        gameIndex = gameIndex,
         userHolderId = userHolderId,
         name = name,
         size = size,

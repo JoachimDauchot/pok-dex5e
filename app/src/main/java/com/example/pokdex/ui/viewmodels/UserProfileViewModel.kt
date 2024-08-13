@@ -1,5 +1,6 @@
 package com.example.pokdex.ui.viewmodels
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,10 @@ class UserProfileViewModel(
 
     suspend fun refreshUser() {
         user.value = userAndPkmnRepository.getUser()
+    }
+
+    suspend fun getPokemonIcon(index: Int): Bitmap {
+        return userAndPkmnRepository.loadSummaryImage(index.toString())
     }
 
     suspend fun addPokemonToParty(index: Int) {

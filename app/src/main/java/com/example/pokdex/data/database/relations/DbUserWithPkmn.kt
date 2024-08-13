@@ -13,7 +13,7 @@ data class DbUserWithPkmn(
         parentColumn = "userId",
         entityColumn = "userHolderId",
     )
-    val pokemons: List<DbPokemonInstance>?,
+    val pokemons: List<DbPokemonInstance?>?,
 
 )
 
@@ -21,7 +21,6 @@ fun DbUserWithPkmn?.asDomainObject(): UserProfile {
     if (this == null) {
         return UserProfile(0, "", 0, null)
     } else {
-        val pokemonParty = pokemons?.map { pokemon -> pokemon.asDomainObject() }
         return if (userProfile == null) {
             UserProfile(0, "", 0, null)
         } else {
@@ -29,7 +28,8 @@ fun DbUserWithPkmn?.asDomainObject(): UserProfile {
                 userId = userProfile.userId,
                 level = userProfile.level!!,
                 name = userProfile.name!!,
-                pokemonParty = pokemonParty,
+                pokemonParty = pokemons?.map { pokemon -> pokemon?.asDomainObject() }
+                    ?: listOf(null, null, null, null, null, null),
             )
         }
     }

@@ -22,7 +22,7 @@ class ImageStorageManager {
             val directory = context.filesDir
             val file = File(directory, imageFileName)
             val inputStream = FileInputStream(file)
-            val image =  BitmapFactory.decodeStream(inputStream)
+            val image = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
             return image
         }

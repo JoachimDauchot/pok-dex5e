@@ -6,7 +6,7 @@ data class UserProfile(
     var userId: Int?,
     var name: String,
     var level: Int,
-    var pokemonParty: List<PokemonInstance>?,
+    var pokemonParty: List<PokemonInstance?>? = listOf(null, null, null, null, null, null),
 )
 
 fun UserProfile.asDbObject(): DbUserProfile {
