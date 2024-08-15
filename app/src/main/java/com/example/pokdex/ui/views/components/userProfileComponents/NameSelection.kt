@@ -35,7 +35,7 @@ fun NameSelection(userProfileViewModel: UserProfileViewModel) {
             value = name,
             onValueChange = { name = it },
             label = { Text("Enter Name") },
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(10.dp))
         Button(onClick = {

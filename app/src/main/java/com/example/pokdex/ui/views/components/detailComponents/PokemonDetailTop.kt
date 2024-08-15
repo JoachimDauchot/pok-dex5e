@@ -45,6 +45,7 @@ fun PokemonDetailTop(pokemon: PokemonDetail) {
         Box(
             modifier = Modifier.fillMaxWidth().height(210.dp)
                 .background(Brush.horizontalGradient(colorList)),
+
         ) {
             Column(modifier = Modifier.align(Alignment.TopStart).padding(5.dp)) {
                 for (type in pokemon.types) {
@@ -55,6 +56,7 @@ fun PokemonDetailTop(pokemon: PokemonDetail) {
                     )
                 }
             }
+            Text(modifier = Modifier.align(Alignment.TopEnd).padding(end = 16.dp), text = "#${pokemon.index}", color = Color.DarkGray, fontSize = 36.sp)
             Box(
                 modifier = Modifier.fillMaxWidth().height(45.dp).align(Alignment.BottomCenter)
                     .background(

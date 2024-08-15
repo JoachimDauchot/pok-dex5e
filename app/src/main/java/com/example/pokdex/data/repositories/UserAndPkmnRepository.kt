@@ -18,6 +18,7 @@ interface UserAndPkmnRepository {
     suspend fun insertUser(user: UserProfile)
     suspend fun getUser(): UserProfile
     suspend fun insertPokemonInstance(pokemon: PokemonInstance)
+    suspend fun deletePokemonInstance(pokemon: PokemonInstance)
     suspend fun fetchSummaryImage(index: String): Bitmap
     suspend fun loadSummaryImage(index: String): Bitmap
 }
@@ -39,6 +40,10 @@ class PersistUserOrPokemonToDB(
         pokemonInstanceDAO.insert(pokemon.asDbObject())
     }
 
+    override suspend fun deletePokemonInstance(pokemon: PokemonInstance) {
+        pokemonInstanceDAO.delete(pokemon.asDbObject())
+    }
+
     override suspend fun fetchSummaryImage(index: String): Bitmap {
         try {
             val url = URL("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$index.png")
@@ -47,7 +52,7 @@ class PersistUserOrPokemonToDB(
 
             return bitmap
         } catch (e: Exception) {
-            Log.i("image saving", "Failed to retrieve and save image $index at https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$index.png")
+            Log.i("image saving", "Failed to retrieve and save image $index at https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$index.png ${e.message}")
             Log.i("error fetchSummary", e.toString())
         }
         return BitmapFactory.decodeResource(context.resources, R.drawable.pok__ball_icon_svg)

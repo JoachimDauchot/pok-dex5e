@@ -2,16 +2,15 @@ package com.example.pokdex.ui.viewmodels
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.pokdex.PokedexApplication
 import com.example.pokdex.data.repositories.PokemonDetailRepository
 import com.example.pokdex.data.repositories.UserAndPkmnRepository
+import com.example.pokdex.model.PokemonInstance
 import com.example.pokdex.model.UserProfile
 import com.example.pokdex.model.asInstance
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,13 +20,15 @@ import kotlinx.coroutines.launch
 class UserProfileViewModel(
     private var userAndPkmnRepository: UserAndPkmnRepository,
     private var pokemonDetailRepository: PokemonDetailRepository,
-    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     var user: MutableStateFlow<UserProfile> = MutableStateFlow(UserProfile(0, "", 0, null))
+    var isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     init {
         viewModelScope.launch {
+            isLoading.value = true
             user.value = userAndPkmnRepository.getUser()
+            isLoading.value = false
         }
     }
     suspend fun insertUser(name: String) {
@@ -43,15 +44,23 @@ class UserProfileViewModel(
     }
 
     suspend fun addPokemonToParty(index: Int) {
-        val pokemonInstance = pokemonDetailRepository.getPokemonDetail(index).firstOrNull()?.asInstance()
-        if (pokemonInstance != null && user.value.userId != 0) {
-            pokemonInstance.userHolderId = user.value.userId!!
-            try {
-                userAndPkmnRepository.insertPokemonInstance(pokemonInstance)
-            } catch (e: Exception) {
-                Log.i("pokemon instance", "failed to insert instance")
+        try {
+            val pokemonInstance = pokemonDetailRepository.getPokemonDetail(index).firstOrNull()?.asInstance()
+            if (pokemonInstance != null && user.value.userId != 0) {
+                pokemonInstance.userHolderId = user.value.userId!!
+                if (user.value.pokemonParty?.size!! < 6) userAndPkmnRepository.insertPokemonInstance(pokemonInstance)
             }
-        }
+            refreshUser()
+        } catch (e: Exception) {
+            Log.e(e.cause.toString(), e.message!!) }
+    }
+
+    suspend fun deletePokemonFromParty(pokemon: PokemonInstance) {
+        try {
+            userAndPkmnRepository.deletePokemonInstance(pokemon)
+            refreshUser()
+        } catch (e: Exception) {
+            Log.e(e.cause.toString(), e.message!!) }
     }
 
     companion object {
@@ -61,7 +70,7 @@ class UserProfileViewModel(
 
                 val userAndPkmnRepository = application.container.userAndPkmnRepository
                 val pokemonDetailRepository = application.container.pokemonDetailRepository
-                UserProfileViewModel(userAndPkmnRepository, pokemonDetailRepository, this.createSavedStateHandle())
+                UserProfileViewModel(userAndPkmnRepository, pokemonDetailRepository)
             }
         }
     }

@@ -18,15 +18,19 @@ fun PokemonSlots(pokemonParty: List<PokemonInstance?>?, userProfileViewModel: Us
     if (pokemonParty != null) {
         var index = 0
         for (pokemon in pokemonParty) {
-            pokemonPartyArray.set(index, pokemon)
+            try {
+                pokemonPartyArray.set(index, pokemon)
+            } catch (e: ArrayIndexOutOfBoundsException) {
+                continue
+            }
             index++
         }
     }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
         PokemonSlotRow(pokemon1 = pokemonPartyArray[0], pokemon2 = pokemonPartyArray[1], userProfileViewModel)
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         PokemonSlotRow(pokemon1 = pokemonPartyArray[2], pokemon2 = pokemonPartyArray[3], userProfileViewModel)
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         PokemonSlotRow(pokemon1 = pokemonPartyArray[4], pokemon2 = pokemonPartyArray[5], userProfileViewModel)
     }
 }
