@@ -95,7 +95,7 @@ fun AddPokemonDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextButton(onClick = { addPokemon(index.toInt()); onDismissRequest() }) {
+                    TextButton(onClick = { addPokemon(index.toInt()); onDismissRequest() }, enabled = index.isNotBlank()) {
                         Text("ADD", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MaterialTheme.colorScheme.onPrimary, textAlign = TextAlign.Start)
                     }
                     TextButton(onClick = onDismissRequest) {
