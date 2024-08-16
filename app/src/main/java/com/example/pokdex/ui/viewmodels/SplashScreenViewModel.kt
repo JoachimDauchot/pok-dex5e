@@ -2,7 +2,6 @@ package com.example.pokdex.ui.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -38,7 +37,6 @@ class SplashScreenViewModel(
     var isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
     var isUpToDate: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private var hasInternetConnection: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private var summariesIndices: List<Int> by mutableStateOf(emptyList())
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -89,14 +87,7 @@ class SplashScreenViewModel(
     private suspend fun getSummaries() {
         statusText.value = "Updating summaries"
         statusSubtext.value = "This may take a while on first startup"
-        // persist summaries and request the indeces for image retrieval
-        summariesIndices = pokemonSummaryRepository.refresh()
-//        val count: Int = summariesIndices.count()
-//        for (index in summariesIndices) {
-//            statusProgressText.value = "($index / $count)"
-//            pokemonSummaryRepository.saveImageToInternalStorage("summary_$index.png", "$index.png")
-//            progress = MutableStateFlow(index.toFloat() / count.toFloat())
-//        }
+        pokemonSummaryRepository.refresh()
     }
 
     private suspend fun getMoves() {

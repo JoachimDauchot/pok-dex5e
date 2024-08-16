@@ -22,7 +22,7 @@ interface PokemonSummaryRepository {
     suspend fun insert(item: PokemonSummary)
     fun getSummaries(): Flow<List<PokemonSummary>>
     suspend fun loadSummaryImage(index: String): Bitmap
-    suspend fun refresh(): ArrayList<Int>
+    suspend fun refresh()
 
     suspend fun getSummary(name: String): PokemonSummary
     suspend fun fetchSummaryImage(index: String): Bitmap
@@ -47,7 +47,7 @@ class PersistPokemonSummaryToDb(
         val result = pokemonSummaryDAO.getSummary(name)
         return result.asDomainObject()
     }
-    override suspend fun refresh(): ArrayList<Int> {
+    override suspend fun refresh() {
         val indices: ArrayList<Int> = ArrayList<Int>()
         indices.clear()
         try {
@@ -61,7 +61,6 @@ class PersistPokemonSummaryToDb(
         } catch (e: Exception) {
             Log.i("API", "API is down")
         }
-        return indices
     }
 
     override suspend fun fetchSummaryImage(index: String): Bitmap {

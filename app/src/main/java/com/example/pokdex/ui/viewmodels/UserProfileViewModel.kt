@@ -21,7 +21,7 @@ class UserProfileViewModel(
     private var userAndPkmnRepository: UserAndPkmnRepository,
     private var pokemonDetailRepository: PokemonDetailRepository,
 ) : ViewModel() {
-    var user: MutableStateFlow<UserProfile> = MutableStateFlow(UserProfile(0, "", 0, null))
+    var user: MutableStateFlow<UserProfile> = MutableStateFlow(UserProfile(0, "", 0, listOf()))
     var isLoading: MutableStateFlow<Boolean> = MutableStateFlow(true)
 
     init {
@@ -32,7 +32,8 @@ class UserProfileViewModel(
         }
     }
     suspend fun insertUser(name: String) {
-        userAndPkmnRepository.insertUser(UserProfile(level = 1, name = name, pokemonParty = null, userId = null))
+        userAndPkmnRepository.insertUser(UserProfile(level = 1, name = name, pokemonParty = listOf(), userId = 1))
+        refreshUser()
     }
 
     suspend fun refreshUser() {
@@ -52,7 +53,9 @@ class UserProfileViewModel(
             }
             refreshUser()
         } catch (e: Exception) {
-            Log.e(e.cause.toString(), e.message!!) }
+            // Log.e(e.cause.toString(), e.message!!)
+            e.printStackTrace()
+        }
     }
 
     suspend fun deletePokemonFromParty(pokemon: PokemonInstance) {
