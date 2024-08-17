@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CorrectPageDisplayed()">
+        <State />
+      </entry>
+      <entry key="PokedexAppTest">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="autoNavigatedToSummaryView()">
+        <State />
+      </entry>
+      <entry key="generalNavigationTest()">
         <State />
       </entry>
     </value>
